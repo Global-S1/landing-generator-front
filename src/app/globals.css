@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn{
+  @apply py-2 px-4 bg-gray-900 text-white rounded-md hover:bg-gray-700 disabled:opacity-50;
+}
+
+.sidebar{
+  @apply flex flex-col;
+}
+
+
+/* started/set-prompt */
+.promptContainer{
+  width: 60%;
+  padding: 60px 20px;
+  border: 10px solid rgb(175, 179, 223);
+  border-radius: 40px
+}
+.descriptionForm{
+  @apply flex flex-col gap-6 justify-center items-center;
+}
+.promptContainer__title{
+  @apply w-[70%] p-2 border-2 border-blue-700 rounded-md;
+  font-size: 1.4rem;
+}
+.promptContainer__desc{
+  @apply w-[70%] p-2 border-2 border-blue-700 rounded-md;
+  font-size: 1.4rem;
+}
+.promptContainer__button{
+
+}
+
+
+/* started/templates */
+.cardTemplate{
+  @apply w-[400px] h-[200px] border-2 border-gray-400 rounded-md overflow-hidden cursor-pointer;
+}
+.cardTemplate:hover > img{
+  transition: all 300ms;
+  transform: scale(1.1);
+  background-color: aqua;
+}
+.cardTemplate__img{
+  width: 100%;
+  height: 100%;
+}
+
+/* Sidebar */
+.editElement__button{
+  @apply p-2 border-[1px] border-gray-500 hover:bg-gray-500 hover:text-white transition;
+}
+.editElement__button--ai{
+  @apply p-2 border-[1px] border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white transition;
+}
+
+.promptImgContainer{
+  border-radius: 4px;
+  padding: 10px;
+  background: white;
+  box-shadow: 0px 10px 30px rgb(73, 73, 73,0.5);
+  position: absolute;
+  top: 40px;
+  right: 0px;
+  z-index: 10px;
+  width: 100%;
+}
