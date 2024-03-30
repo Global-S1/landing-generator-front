@@ -1,7 +1,9 @@
 "use client";
 
+import { LandingGeneratorApi } from "@/api";
 import { SelectTemplate } from "@/components/initial";
 import { LoaderEditSecion } from "@/components/main-content";
+import { APIResponse } from "@/interfaces";
 import { useDataToStore, useGeneratePageStore } from "@/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -24,24 +26,11 @@ export default function SetPromptPage() {
         template_option: templateOption,
         prompt
       };
-      console.log(body);
 
-      const resp = await fetch("http://localhost:3001/api/landing/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
+      const resp = await LandingGeneratorApi.post<APIResponse>('/create', body)
+      const json = await resp.data;
 
-      if (!resp.ok) {
-        const error = await resp.json();
-        console.log(error);
-        return;
-      }
-
-      const json = await resp.json();
-      setPageHtml(json.data);
+      setPageHtml(json.template);
       setSections(json.sections)
       setIsLoading(false)
       router.push("/create");

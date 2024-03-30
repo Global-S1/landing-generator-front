@@ -26,7 +26,7 @@ export const LinkElementSection = ({ element, sectionId }: ElementProps) => {
             sectionId,
             tagName: element.tagName,
             link: {
-                oldValues:{
+                oldValues: {
                     text: linkText,
                     href: linkHref
                 },
@@ -37,6 +37,8 @@ export const LinkElementSection = ({ element, sectionId }: ElementProps) => {
             }
         }
         ).then(data => {
+            if (!data) return
+
             setPageHtml(data.template)
             setSections(data.sections)
         })

@@ -41,6 +41,7 @@ export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
             }
         }
         ).then(data => {
+            if (!data) return
             setPageHtml(data.template)
             setSections(data.sections)
         })
@@ -53,6 +54,8 @@ export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
             oldSrc: imgSrc,
             sectionId
         }).then(data => {
+            if (!data) return
+
             setPageHtml(data.template)
             setSections(data.sections)
             setIsLoading(false)

@@ -1,7 +1,6 @@
 "use client";
 
 import { useDataToStore } from "@/store";
-import { useGeneratePageStore } from "@/store/generatePageStore";
 import Image from "next/image";
 
 export const SelectTemplate = () => {

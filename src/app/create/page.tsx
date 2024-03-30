@@ -1,7 +1,9 @@
 "use client";
 
+import { LandingGeneratorApi } from "@/api";
 import { MainContent } from "@/components/main-content";
 import { Sidebar } from "@/components/sidebar";
+import { APILandingExistResponse } from "@/interfaces";
 import { useGeneratePageStore } from "@/store";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -16,17 +18,20 @@ export default function GeneratorPage() {
   useEffect(() => {
     if (html) return;
 
-    fetch("http://localhost:3001/api/landing/exist")
-      .then((resp) => resp.json())
-      .then((data) => {
+    LandingGeneratorApi.get<APILandingExistResponse>('/exist')
+      .then(resp => {
+        const data = resp.data
+
         if (data.template) {
           setPageHtml(data.template);
           setSections(data.sections)
         } else {
-          console.log(data);
           router.push("/");
         }
-      });
+      })
+      .catch(err => console.log(err))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

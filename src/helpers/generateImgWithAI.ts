@@ -1,3 +1,5 @@
+import { LandingGeneratorApi } from "@/api"
+import { ApiImgAiResponse } from "@/interfaces"
 import { ElementToEdit } from "@/interfaces/api-response"
 
 interface Args {
@@ -7,30 +9,29 @@ interface Args {
 }
 
 export const gemerateImgWithAi = async ({ prompt, sectionId, oldSrc }: Args) => {
+    try {
+        const body = {
+            prompt,
+            sectionId,
+            oldSrc
+        }
 
-    const body = {
-        prompt,
-        sectionId,
-        oldSrc
+        const resp = await LandingGeneratorApi.post<ApiImgAiResponse>('/img-create', body)
+
+        const json = resp.data
+
+        return {
+            url: json.url,
+            template: json.template,
+            sections: json.sections as { [id: string]: ElementToEdit[] }
+        }
+    } catch (error) {
+        console.log(error)
+        return null
     }
 
-    const resp = await fetch('http://localhost:3001/api/landing/img-create', {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-    })
-
-    if (!resp.ok) {
-        console.log('Error')
-    }
-    const json = await resp.json()
 
 
-    return {
-        url: json.url,
-        template: json.data,
-        sections: json.sections as { [id: string]: ElementToEdit[] }
-    }
+
+
 }

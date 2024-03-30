@@ -1,18 +1,12 @@
 import { redirect } from "next/navigation";
-import { DescriptionLandingForm, SelectTemplate } from "@/components/initial";
+import { LandingGeneratorApi } from "@/api";
+import { APILandingExistResponse } from "@/interfaces";
 
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-
-  const resp = await fetch('http://localhost:3001/api/landing/exist')
-
-  if (!resp.ok) {
-    redirect('/started/set-prompt')
-
-  }
-  const json = await resp.json()
-
+  const resp = await LandingGeneratorApi.get<APILandingExistResponse>('/exist')
+  const json = resp.data
 
   if (json.template) {
     redirect('/create')

@@ -22,6 +22,8 @@ export const DescriptionElementSection = ({ element, sectionId }: ElementProps) 
             oldText: element.text,
             currentText: formState.element_edit
         }).then(data => {
+            if (!data) return
+
             setPageHtml(data.template)
             setSections(data.sections)
         })

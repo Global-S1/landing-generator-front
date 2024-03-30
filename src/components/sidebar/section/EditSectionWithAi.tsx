@@ -1,3 +1,4 @@
+import { LandingGeneratorApi } from "@/api";
 import { useForm } from "@/hooks";
 import { APIResponse } from "@/interfaces/api-response";
 import { useGeneratePageStore, useUiStore } from "@/store";
@@ -28,28 +29,18 @@ export const EditSectionWithAi = ({ sectionId }: { sectionId: string }) => {
                 template
             };
 
-            const resp = await fetch("http://localhost:3001/api/landing/edit-section", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(body)
-            });
-            if (!resp.ok) {
-                const error = await resp.json();
-                console.log(error);
-                toggleLoadingEditSection()
-                setIsLoading(false)
+            const resp = await LandingGeneratorApi.put<APIResponse>('/edit-section', body);
+            const json = resp.data;
 
-                return;
-            }
-            const json: APIResponse = await resp.json();
-            setPageHtml(json.data);
+            setPageHtml(json.template);
             setSections(json.sections)
             toggleLoadingEditSection()
             setIsLoading(false)
+
         } catch (error) {
             console.log(error);
+            toggleLoadingEditSection()
+            setIsLoading(false)
         }
     };
 

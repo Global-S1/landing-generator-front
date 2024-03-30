@@ -1,4 +1,6 @@
 'use server'
+import { LandingGeneratorApi } from "@/api";
+import { ApiEditElementResponse } from "@/interfaces";
 import { ElementToEdit, SectionType } from "@/interfaces/api-response";
 
 interface Args {
@@ -16,21 +18,21 @@ interface Args {
     }
 }
 
-interface OldImgValues{
+interface OldImgValues {
     src: string;
     alt: string;
 }
 
-interface NewImgValues{
+interface NewImgValues {
     src: string;
     alt: string;
 }
-interface OldLinkValues{
+interface OldLinkValues {
     text: string;
     href: string;
 }
 
-interface NewLinkValues{
+interface NewLinkValues {
     text: string;
     href: string;
 }
@@ -42,50 +44,44 @@ export const updateSectionContent = async ({
     currentText,
     img,
     link
-}: Args): Promise<{ template: string, sections: { [id: string]: ElementToEdit[] } }> => {
+}: Args): Promise<{ template: string, sections: { [id: string]: ElementToEdit[] } } | null> => {
 
-    let body = {}
+    try {
 
-    if(img){
-        body = {
-            sectionId,
-            tagName,
-            img
+        let body = {}
+
+        if (img) {
+            body = {
+                sectionId,
+                tagName,
+                img
+            }
+        } else if (link) {
+            body = {
+                sectionId,
+                tagName,
+                link
+            }
         }
-    }else if(link){
-        body = {
-            sectionId,
-            tagName,
-            link
-        }
-    }
-    else{
-        body = {
-            sectionId,
-            tagName,
-            oldText,
-            newText: currentText
+        else {
+            body = {
+                sectionId,
+                tagName,
+                oldText,
+                newText: currentText
+            }
         }
 
+        const resp = await LandingGeneratorApi.put<ApiEditElementResponse>('/edit-element', body)
+        const json = resp.data
+
+        return {
+            template: json.template,
+            sections: json.sections as { [id: string]: ElementToEdit[] }
+        }
+    } catch (error) {
+        console.log(error)
+        return null
     }
-    
 
-    const resp = await fetch('http://localhost:3001/api/landing/edit-element', {
-        method: 'PUT',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-    })
-
-    if (!resp.ok) {
-        console.log('Error')
-    }
-    const json = await resp.json()
-
-
-    return {
-        template: json.data,
-        sections: json.sections as { [id: string]: ElementToEdit[] }
-    }
 }

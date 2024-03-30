@@ -1,0 +1,1 @@
+export { LandingGeneratorApi } from "./LandingApi";
