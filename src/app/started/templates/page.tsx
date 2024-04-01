@@ -8,7 +8,7 @@ import { useDataToStore, useGeneratePageStore } from "@/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function SetPromptPage() {
+export default function TemplatePage() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false)
