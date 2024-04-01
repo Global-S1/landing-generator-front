@@ -1,13 +1,13 @@
 'use client'
 
+import { ChangeEvent, useState } from "react";
 import { useForm } from "@/hooks";
 import { useGeneratePageStore } from '@/store';
-import { updateSectionContent } from '@/helpers/updateSectionContent';
+import { updateSectionContent, gemerateImgWithAi, uploadImgApi } from '@/actions';
 import { IoSaveOutline } from 'react-icons/io5';
 import { ElementProps } from "./Element";
 import { BsStars } from "react-icons/bs";
-import { gemerateImgWithAi } from "@/helpers/generateImgWithAI";
-import { useState } from "react";
+import { FaCloudUploadAlt } from "react-icons/fa";
 
 export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
 
@@ -24,6 +24,9 @@ export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
 
     const setPageHtml = useGeneratePageStore(state => state.setPageHtml)
     const setSections = useGeneratePageStore(state => state.setSections)
+
+    const [fileImg, setFileImg] = useState<File | null>(null)
+
 
     async function updateLandingContent() {
         updateSectionContent({
@@ -58,6 +61,31 @@ export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
 
             setPageHtml(data.template)
             setSections(data.sections)
+            setIsLoading(false)
+        })
+    }
+
+    const handleChageInputFile = (event: ChangeEvent<HTMLInputElement>) => {
+        const files = (event.target as HTMLInputElement).files
+        if (files) {
+            setFileImg(files[0])
+        }
+
+    }
+
+    async function uploadImage() {
+        if (!fileImg) return
+        setIsLoading(true)
+        uploadImgApi({
+            img: fileImg,
+            sectionId,
+            oldSrc: imgSrc
+        }).then(data => {
+            if (!data) return
+
+            setPageHtml(data.template)
+            setSections(data.sections)
+            setFileImg(null)
             setIsLoading(false)
         })
     }
@@ -116,16 +144,32 @@ export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
                 }
             </div>
             <hr />
-            <div className='flex flex-row items-center gap-2'>
+
+            <div className="flex flex-row items-center gap-2 mb-2">
+                <input
+                    className="block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 rounded-s"
+                    id="file_input"
+                    type="file"
+                    onChange={handleChageInputFile}
+                />
+                <button
+                    className="editElement__button"
+                    onClick={uploadImage}
+                    aria-label="Upload image"
+                >
+                    <FaCloudUploadAlt />
+                </button>
+            </div>
+            {/* <div className='flex flex-row items-center gap-2'>
                 <label>src</label>
                 <input
-                    className='p-2 border-[1px] w-full border-gray-500 rounded-md'
+                    className='p-2 border-[1px] w-full border-gray-500 rounded-md cursor-pointer'
                     name="src"
                     type="text"
                     value={formState.src}
                     onChange={onInputChange}
                 />
-            </div>
+            </div> */}
             <div className='flex flex-row items-center gap-2'>
                 <label>alt</label>
                 <input

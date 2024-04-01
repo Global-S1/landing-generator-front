@@ -4,7 +4,7 @@ import { useForm } from "@/hooks";
 import { useGeneratePageStore } from '@/store';
 import { IoSaveOutline } from 'react-icons/io5';
 import { ElementProps } from "./Element";
-import { updateSectionContent } from "@/helpers/updateSectionContent";
+import { updateSectionContent } from "@/actions";
 
 export const LinkElementSection = ({ element, sectionId }: ElementProps) => {
 
@@ -16,7 +16,6 @@ export const LinkElementSection = ({ element, sectionId }: ElementProps) => {
         href: linkHref
     });
 
-    const html = useGeneratePageStore(state => state.html)
     const setPageHtml = useGeneratePageStore(state => state.setPageHtml)
     const setSections = useGeneratePageStore(state => state.setSections)
 

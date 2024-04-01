@@ -1,8 +1,5 @@
-import { ImageElementSection } from './ImageElementSection';
-import { TitleElementSection } from './TitleElementSection'
-import { ElementToEdit, SectionType } from '@/interfaces/api-response';
-import { LinkElementSection } from './LinkElementSection';
-import { DescriptionElementSection } from './DescriptionElementSection';
+import { TitleElementSection, ImageElementSection, DescriptionElementSection, LinkElementSection } from './'
+import { ElementToEdit, SectionType } from '@/interfaces';
 
 export interface ElementProps {
     sectionId: SectionType;

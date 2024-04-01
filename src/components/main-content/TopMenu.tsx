@@ -7,7 +7,7 @@ import { PiKeyReturnBold } from "react-icons/pi";
 
 import { LandingGeneratorApi } from "@/api";
 import { useUiStore, useGeneratePageStore } from "@/store";
-import { updateTemplateCode } from "@/helpers/updateTemplateCode";
+import { updateTemplateCode } from "@/actions";
 import { ApiTemplateHistoryResponse } from "@/interfaces";
 
 export const TopMenu = () => {

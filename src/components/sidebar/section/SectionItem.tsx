@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
-import { SectionType } from '@/interfaces/api-response'
+import { SectionType } from '@/interfaces'
 import { SectionItemEdit } from './SectionItemEdit'
 
 interface Props {

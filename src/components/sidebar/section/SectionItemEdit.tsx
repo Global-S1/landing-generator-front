@@ -1,7 +1,7 @@
 import { useGeneratePageStore } from '@/store'
-import { SectionType } from '@/interfaces/api-response'
+import { SectionType } from '@/interfaces'
 import { EditSectionWithAi } from './EditSectionWithAi';
-import { Element } from './element/Element';
+import { Element } from './element';
 
 export const SectionItemEdit = ({ sectionId }: { sectionId: SectionType }) => {
     const sections = useGeneratePageStore((state) => state.sections);
@@ -16,7 +16,6 @@ export const SectionItemEdit = ({ sectionId }: { sectionId: SectionType }) => {
                     )
                 })
             }
-
             <EditSectionWithAi sectionId={sectionId} />
         </div>
     )

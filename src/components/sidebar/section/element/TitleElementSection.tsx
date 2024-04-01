@@ -2,7 +2,7 @@
 
 import { useForm } from "@/hooks";
 import { useGeneratePageStore } from '@/store';
-import { updateSectionContent } from '@/helpers/updateSectionContent';
+import { updateSectionContent } from '@/actions';
 import { IoSaveOutline } from 'react-icons/io5';
 import { ElementProps } from "./Element";
 

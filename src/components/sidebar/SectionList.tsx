@@ -1,7 +1,7 @@
 "use client";
-import { useGeneratePageStore } from "@/store/generatePageStore";
+import { useGeneratePageStore } from "@/store";
 import { SectionItem } from "./section/SectionItem";
-import { SectionType } from "@/interfaces/api-response";
+import { SectionType } from "@/interfaces";
 
 export const SectionList = () => {
 

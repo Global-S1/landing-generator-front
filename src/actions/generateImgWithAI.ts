@@ -1,6 +1,5 @@
 import { LandingGeneratorApi } from "@/api"
-import { ApiImgAiResponse } from "@/interfaces"
-import { ElementToEdit } from "@/interfaces/api-response"
+import { ApiImgResponse, ElementToEdit } from "@/interfaces"
 
 interface Args {
     prompt: string,
@@ -16,12 +15,11 @@ export const gemerateImgWithAi = async ({ prompt, sectionId, oldSrc }: Args) => 
             oldSrc
         }
 
-        const resp = await LandingGeneratorApi.post<ApiImgAiResponse>('/img-create', body)
+        const resp = await LandingGeneratorApi.post<ApiImgResponse>('/images/create', body)
 
         const json = resp.data
 
         return {
-            url: json.url,
             template: json.template,
             sections: json.sections as { [id: string]: ElementToEdit[] }
         }
@@ -29,9 +27,4 @@ export const gemerateImgWithAi = async ({ prompt, sectionId, oldSrc }: Args) => 
         console.log(error)
         return null
     }
-
-
-
-
-
 }

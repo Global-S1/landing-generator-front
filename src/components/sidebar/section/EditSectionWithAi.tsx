@@ -1,8 +1,8 @@
+import { useState } from "react";
 import { LandingGeneratorApi } from "@/api";
 import { useForm } from "@/hooks";
-import { APIResponse } from "@/interfaces/api-response";
+import { APIResponse } from "@/interfaces";
 import { useGeneratePageStore, useUiStore } from "@/store";
-import { useState } from "react";
 import { SiCodemagic } from "react-icons/si";
 
 export const EditSectionWithAi = ({ sectionId }: { sectionId: string }) => {
