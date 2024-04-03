@@ -18,22 +18,24 @@ export default function TemplatePage() {
   const templateOption = useDataToStore((state) => state.template_option);
   const setPageHtml = useGeneratePageStore((state) => state.setPageHtml);
   const setSections = useGeneratePageStore((state) => state.setSections);
+  const setLandingId = useGeneratePageStore((state) => state.setLandingId);
 
   async function onSubmit() {
     setIsLoading(true)
     try {
       const body = {
-        template_option: templateOption,
+        user_id: 'ee0e2eb8-f318-4942-b3f8-acc1300695a4',
+        template_id: templateOption,
         prompt
       };
 
       const resp = await LandingGeneratorApi.post<APIResponse>('/create', body)
-      const json = await resp.data;
-
+      const json = resp.data;
+      setLandingId(json.id)
       setPageHtml(json.template);
       setSections(json.sections)
       setIsLoading(false)
-      router.push("/create");
+      router.push(`/create/${json.id}`);
     } catch (error) {
       console.log(error);
     }

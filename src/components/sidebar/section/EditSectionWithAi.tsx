@@ -10,6 +10,7 @@ export const EditSectionWithAi = ({ sectionId }: { sectionId: string }) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const template = useGeneratePageStore((state) => state.html);
+    const landingId = useGeneratePageStore((state) => state.landingId);
 
     const setPageHtml = useGeneratePageStore((state) => state.setPageHtml);
     const setSections = useGeneratePageStore((state) => state.setSections);
@@ -25,11 +26,10 @@ export const EditSectionWithAi = ({ sectionId }: { sectionId: string }) => {
         try {
             const body = {
                 prompt: description,
-                section: sectionId,
-                template
+               sectionId
             };
 
-            const resp = await LandingGeneratorApi.put<APIResponse>('/edit-section', body);
+            const resp = await LandingGeneratorApi.put<APIResponse>(`/edit-section/${landingId}`, body);
             const json = resp.data;
 
             setPageHtml(json.template);

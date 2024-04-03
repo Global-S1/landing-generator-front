@@ -1,5 +1,5 @@
 export interface APIResponse {
-    usage: Usage;
+    id:string
     sections: Sections;
     template: string;
 }

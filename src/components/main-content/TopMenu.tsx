@@ -15,6 +15,7 @@ export const TopMenu = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const html = useGeneratePageStore((state) => state.html);
+  const landingId = useGeneratePageStore(state => state.landingId)
   const setPageHtml = useGeneratePageStore((state) => state.setPageHtml);
   const setSections = useGeneratePageStore((state) => state.setSections);
   const editedTemplate = useGeneratePageStore((state) => state.editedTemplate);
@@ -24,28 +25,25 @@ export const TopMenu = () => {
 
   async function exportLandingPage() {
     try {
-      const body = {
-        template: html
-      };
+        const resp = await LandingGeneratorApi.post(`/export/${landingId}`, {
+            responseType: 'text'  // Esperando respuesta como texto
+        });
 
-      const resp = await LandingGeneratorApi.post('/export', body, {
-        responseType: 'blob'
-      })
+        const blob = new Blob([resp.data], { type: 'text/html' });
 
-      const fileBlob = resp.data;
-      const urlFile = window.URL.createObjectURL(fileBlob); // enlace temporal para descargar el archivo
+        const urlFile = window.URL.createObjectURL(blob);
 
-      const linkDownload = document.createElement("a");
-      linkDownload.href = urlFile;
-      linkDownload.setAttribute("download", "landing.html");
-      document.body.appendChild(linkDownload);
+        const linkDownload = document.createElement("a");
+        linkDownload.href = urlFile;
+        linkDownload.setAttribute("download", "landing.html");
+        document.body.appendChild(linkDownload);
 
-      linkDownload.click(); // iniciar la descarga
-      linkDownload.remove(); // Eliminar el enlace después de la descarga
+        linkDownload.click();
+        linkDownload.remove();
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
-  };
+}
 
   async function setPreview() {
     if (editedTemplate === html) {
@@ -53,11 +51,11 @@ export const TopMenu = () => {
       return;
     }
 
-    updateTemplateCode({ editedTemplate })
+    updateTemplateCode({ landingId, editedTemplate })
       .then(data => {
         if (!data) return
 
-        setPageHtml(editedTemplate)
+        setPageHtml(data.template)
         setSections(data.sections)
         toggleShowCode()
       })
@@ -70,7 +68,7 @@ export const TopMenu = () => {
   async function earlierVersion() {
     setIsLoading(true)
     try {
-      const resp = await LandingGeneratorApi.get<ApiTemplateHistoryResponse>('/earlier-version');
+      const resp = await LandingGeneratorApi.get<ApiTemplateHistoryResponse>(`/earlier-version/${landingId}`);
       const json = resp.data;
 
       setSections(json.sections)
@@ -84,10 +82,10 @@ export const TopMenu = () => {
 
   return (
     <section className="flex gap-4">
-      <button className="btn flex items-center gap-2" disabled={isLoading} onClick={earlierVersion}>
+      {/* <button className="btn flex items-center gap-2" disabled={isLoading} onClick={earlierVersion}>
         <PiKeyReturnBold />
         Revertir cambios
-      </button>
+      </button> */}
 
       {
         (!showCode)

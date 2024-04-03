@@ -22,6 +22,7 @@ export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
         prompt_img: imgAlt
     });
 
+    const landingId = useGeneratePageStore(state => state.landingId)
     const setPageHtml = useGeneratePageStore(state => state.setPageHtml)
     const setSections = useGeneratePageStore(state => state.setSections)
 
@@ -29,7 +30,7 @@ export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
 
 
     async function updateLandingContent() {
-        updateSectionContent({
+        updateSectionContent(landingId, {
             sectionId,
             tagName: element.tagName,
             img: {
@@ -52,7 +53,8 @@ export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
 
     async function createNewImage() {
         setIsLoading(true)
-        gemerateImgWithAi({
+        gemerateImgWithAi(
+            landingId, {
             prompt: formState.prompt_img,
             oldSrc: imgSrc,
             sectionId
@@ -76,7 +78,8 @@ export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
     async function uploadImage() {
         if (!fileImg) return
         setIsLoading(true)
-        uploadImgApi({
+        uploadImgApi(
+            landingId, {
             img: fileImg,
             sectionId,
             oldSrc: imgSrc

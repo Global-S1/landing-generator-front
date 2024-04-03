@@ -1,47 +1,48 @@
 "use client";
 
+import { Template, TemplateListResponse } from "@/interfaces";
 import { useDataToStore } from "@/store";
+import axios from "axios";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export const SelectTemplate = () => {
   const setTemplateOption = useDataToStore(
     (state) => state.setTemplateOption
   );
 
-  const onSetTemplate = async (option: number) => {
-    console.log(option)
-    setTemplateOption(option);
+  const onSetTemplate = async (templateid: string) => {
+    setTemplateOption(templateid);
   };
+
+  const [templates, setTemplates] = useState<Template[]>([])
+
+  useEffect(() => {
+    axios.get<TemplateListResponse>('http://localhost:3001/api/template')
+      .then(resp => {
+        const json = resp.data;
+
+        setTemplates(json.data)
+
+      })
+      .catch(err => console.log(err))
+  }, [])
 
   return (
     <div className="flex gap-2">
-      <div className="cardTemplate" onClick={() => onSetTemplate(1)}>
-        <Image
-          src="/templates/template-1.png"
-          width={300}
-          height={200}
-          alt="template 1"
-          className="cardTemplate__img"
-        />
-      </div>
-      <div className="cardTemplate" onClick={() => onSetTemplate(2)}>
-        <Image
-          src="/templates/template-2.png"
-          width={300}
-          height={200}
-          alt="template 2"
-          className="cardTemplate__img"
-        />
-      </div>
-      <div className="cardTemplate" onClick={() => onSetTemplate(3)}>
-        <Image
-          src="/templates/template-3.png"
-          width={300}
-          height={200}
-          alt="template 3"
-          className="cardTemplate__img"
-        />
-      </div>
+      {
+        templates.map((template, idx) => (
+          <div key={template.id} className="cardTemplate" onClick={() => onSetTemplate(template.id)}>
+            <Image
+              src={`/templates/template-${idx+1}.png`}
+              width={300}
+              height={200}
+              alt={`template ${idx+1}`}
+              className="cardTemplate__img"
+            />
+          </div>
+        ))
+      }
     </div>
   );
 };

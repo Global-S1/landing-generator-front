@@ -12,11 +12,12 @@ export const TitleElementSection = ({ element, sectionId }: ElementProps) => {
         element_edit: element.text
     });
 
+    const landingId = useGeneratePageStore(state => state.landingId)
     const setPageHtml = useGeneratePageStore(state => state.setPageHtml)
     const setSections = useGeneratePageStore(state => state.setSections)
 
     async function updateLandingContent() {
-        updateSectionContent({
+        updateSectionContent(landingId,{
             sectionId: sectionId,
             tagName: element.tagName,
             oldText: element.text,

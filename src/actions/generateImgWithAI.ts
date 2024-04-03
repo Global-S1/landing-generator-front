@@ -7,7 +7,7 @@ interface Args {
     oldSrc: string
 }
 
-export const gemerateImgWithAi = async ({ prompt, sectionId, oldSrc }: Args) => {
+export const gemerateImgWithAi = async (landingId: string,{ prompt, sectionId, oldSrc }: Args) => {
     try {
         const body = {
             prompt,
@@ -15,7 +15,7 @@ export const gemerateImgWithAi = async ({ prompt, sectionId, oldSrc }: Args) => 
             oldSrc
         }
 
-        const resp = await LandingGeneratorApi.post<ApiImgResponse>('/images/create', body)
+        const resp = await LandingGeneratorApi.post<ApiImgResponse>(`/images/create/${landingId}`, body)
 
         const json = resp.data
 

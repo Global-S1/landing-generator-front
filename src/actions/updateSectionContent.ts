@@ -37,7 +37,7 @@ interface NewLinkValues {
     href: string;
 }
 
-export const updateSectionContent = async ({
+export const updateSectionContent = async (landingId: string,{
     sectionId,
     tagName,
     oldText,
@@ -72,7 +72,7 @@ export const updateSectionContent = async ({
             }
         }
 
-        const resp = await LandingGeneratorApi.put<ApiEditElementResponse>('/edit-element', body)
+        const resp = await LandingGeneratorApi.put<ApiEditElementResponse>(`/edit-element/${landingId}`, body)
         const json = resp.data
 
         return {

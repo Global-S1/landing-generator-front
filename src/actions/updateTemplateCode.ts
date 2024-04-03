@@ -1,13 +1,13 @@
 import { LandingGeneratorApi } from "@/api";
 import { ApiEditTemplateResponse } from "@/interfaces";
 
-export const updateTemplateCode = async ({ editedTemplate }: { editedTemplate: string }) => {
+export const updateTemplateCode = async ({landingId, editedTemplate }: { landingId: string, editedTemplate: string }) => {
     try {
         const body = {
-            template: editedTemplate
+            editedTemplate
         }
 
-        const resp = await LandingGeneratorApi.put<ApiEditTemplateResponse>('/edit-template', body)
+        const resp = await LandingGeneratorApi.put<ApiEditTemplateResponse>(`/edit-template/${landingId}`, body)
         const json = resp.data;
 
         return json

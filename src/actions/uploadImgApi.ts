@@ -7,12 +7,12 @@ interface Args {
   oldSrc: string;
 }
 
-export const uploadImgApi = async ({img, sectionId, oldSrc}: Args) => {
+export const uploadImgApi = async (landingId: string,{img, sectionId, oldSrc}: Args) => {
   try {
 
     const formData = new FormData()
     formData.append('file', img)
-    const resp = await LandingGeneratorApi.post<ApiImgResponse>('/images/upload', formData, {
+    const resp = await LandingGeneratorApi.post<ApiImgResponse>(`/images/upload/${landingId}`, formData, {
       headers: {
         'content-type': 'multipart/form-data',
       },
