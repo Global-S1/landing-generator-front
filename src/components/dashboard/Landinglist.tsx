@@ -6,8 +6,6 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { MdEdit } from "react-icons/md"
 
-const elements = [1, 2, 3, 4, 5]
-
 export const Landinglist = () => {
 
     const [items, setItems] = useState<Landing[]>([])
@@ -25,13 +23,15 @@ export const Landinglist = () => {
 
     }, [])
 
-
   return (
     <section className="flex flex-col gap-4">
         {
           items.map(item => (
-            <div key={item.id} className="flex flex-row justify-between">
-              <span className="text-lg">Landing page {item.id}</span>
+            <div key={item.id} className="flex flex-row justify-between items-center">
+              <div className="flex flex-col">
+              <span className="text-lg font-bold"> {item.title}</span>
+              <span className="text-gray-500">{item.id}</span>
+              </div>
               <Link href={`/create/${item.id}`} className="btn flex gap-2">
                 <MdEdit />
                 Editar

@@ -82,10 +82,10 @@ export const TopMenu = () => {
 
   return (
     <section className="flex gap-4">
-      {/* <button className="btn flex items-center gap-2" disabled={isLoading} onClick={earlierVersion}>
+      <button className="btn flex items-center gap-2" disabled={isLoading} onClick={earlierVersion}>
         <PiKeyReturnBold />
         Revertir cambios
-      </button> */}
+      </button>
 
       {
         (!showCode)
@@ -96,7 +96,7 @@ export const TopMenu = () => {
             <FaCode />
           </button>
       }
-
+      
       <button className="btn" disabled={!html} onClick={exportLandingPage}>
         <FaDownload />
       </button>

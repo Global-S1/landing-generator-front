@@ -43,7 +43,7 @@ export default function GeneratorPage({ params }: { params: { id: string } }) {
       <div className="p-4">
         <Logo />
       </div>
-      <div className="grid grid-cols-[450px_1fr] h-[90vh] overflow-hidden">
+      <div className="grid grid-cols-[400px_1fr] h-[90vh]">
         <Sidebar />
         <MainContent />
       </div>

@@ -6,6 +6,7 @@ export interface LandingListResponse {
 
 export interface Landing {
     id:             string;
+    title:          string;
     initial_prompt: string;
     template:       string;
     sections:       Sections;
