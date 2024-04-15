@@ -1,6 +1,7 @@
 "use client";
 
 import { LandingGeneratorApi } from "@/api";
+import { Logo } from "@/components";
 import { MainContent } from "@/components/main-content";
 import { Sidebar } from "@/components/sidebar";
 import { APILandingExistResponse, APIResponse } from "@/interfaces";
@@ -8,7 +9,7 @@ import { useGeneratePageStore } from "@/store";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function GeneratorPage({params}:{params: {id: string}}) {
+export default function GeneratorPage({ params }: { params: { id: string } }) {
   const router = useRouter();
 
   const html = useGeneratePageStore((state) => state.html);
@@ -40,9 +41,7 @@ export default function GeneratorPage({params}:{params: {id: string}}) {
   return (
     <>
       <div className="p-4">
-        <span className="bg-black text-2xl text-white font-bold font-sans px-2 py-1 rounded-md">
-          LPB
-        </span>
+        <Logo />
       </div>
       <div className="grid grid-cols-[450px_1fr] h-[90vh] overflow-hidden">
         <Sidebar />
