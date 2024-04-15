@@ -14,6 +14,7 @@ export interface Usage {
 }
 
 export interface ElementToEdit {
+    id: string;
     tagName: string;
     type: ElementType;
     text: string;

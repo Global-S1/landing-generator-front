@@ -2,9 +2,9 @@
 
 import { useForm } from "@/hooks";
 import { useGeneratePageStore } from '@/store';
-import { updateSectionContent } from '@/actions/updateSectionContent';
 import { IoSaveOutline } from 'react-icons/io5';
 import { ElementProps } from "./Element";
+import { updateElementContent } from "@/actions";
 
 export const DescriptionElementSection = ({ element, sectionId }: ElementProps) => {
 
@@ -17,14 +17,14 @@ export const DescriptionElementSection = ({ element, sectionId }: ElementProps) 
     const setSections = useGeneratePageStore(state => state.setSections)
 
     async function updateLandingContent() {
-        updateSectionContent(landingId,{
+        updateElementContent(landingId,{
             sectionId: sectionId,
+            data_id: element.id,
             tagName: element.tagName,
-            oldText: element.text,
-            currentText: formState.element_edit
-        }).then(data => {
+            newText: formState.element_edit
+        })
+        .then(data => {
             if (!data) return
-
             setPageHtml(data.template)
             setSections(data.sections)
         })

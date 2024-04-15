@@ -1,4 +1,4 @@
 export * from './generateImgWithAI'
-export * from './updateSectionContent'
+export * from './updateElementContent'
 export * from './updateTemplateCode'
 export * from './uploadImgApi'

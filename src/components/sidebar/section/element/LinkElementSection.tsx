@@ -4,7 +4,7 @@ import { useForm } from "@/hooks";
 import { useGeneratePageStore } from '@/store';
 import { IoSaveOutline } from 'react-icons/io5';
 import { ElementProps } from "./Element";
-import { updateSectionContent } from "@/actions";
+import { updateElementContent } from "@/actions";
 
 export const LinkElementSection = ({ element, sectionId }: ElementProps) => {
 
@@ -22,18 +22,13 @@ export const LinkElementSection = ({ element, sectionId }: ElementProps) => {
 
 
     async function updateLandingContent() {
-        updateSectionContent(landingId,{
+        updateElementContent(landingId, {
+            data_id: element.id,
             sectionId,
             tagName: element.tagName,
             link: {
-                oldValues: {
-                    text: linkText,
-                    href: linkHref
-                },
-                newValues: {
-                    text: formState.text,
-                    href: formState.href
-                }
+                text: formState.text,
+                href: formState.href
             }
         }
         ).then(data => {

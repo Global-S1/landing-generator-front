@@ -3,11 +3,12 @@
 import { ChangeEvent, useState } from "react";
 import { useForm } from "@/hooks";
 import { useGeneratePageStore } from '@/store';
-import { updateSectionContent, gemerateImgWithAi, uploadImgApi } from '@/actions';
+import { gemerateImgWithAi, uploadImgApi } from '@/actions';
 import { IoSaveOutline } from 'react-icons/io5';
 import { ElementProps } from "./Element";
 import { BsStars } from "react-icons/bs";
 import { FaCloudUploadAlt } from "react-icons/fa";
+import { updateElementContent } from "@/actions";
 
 export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
 
@@ -28,20 +29,14 @@ export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
 
     const [fileImg, setFileImg] = useState<File | null>(null)
 
-
     async function updateLandingContent() {
-        updateSectionContent(landingId, {
+        updateElementContent(landingId, {
             sectionId,
+            data_id: element.id,
             tagName: element.tagName,
             img: {
-                oldValues: {
-                    src: imgSrc,
-                    alt: imgAlt
-                },
-                newValues: {
-                    src: formState.src,
-                    alt: formState.alt
-                }
+                src: formState.src,
+                alt: formState.alt
             }
         }
         ).then(data => {
@@ -82,7 +77,7 @@ export const ImageElementSection = ({ element, sectionId }: ElementProps) => {
             landingId, {
             img: fileImg,
             sectionId,
-            oldSrc: imgSrc
+            data_id: element.id
         }).then(data => {
             if (!data) return
 

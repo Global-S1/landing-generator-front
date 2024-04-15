@@ -4,10 +4,10 @@ import { ApiImgResponse, ElementToEdit } from "@/interfaces";
 interface Args {
   img: File;
   sectionId: string;
-  oldSrc: string;
+  data_id: string;
 }
 
-export const uploadImgApi = async (landingId: string,{img, sectionId, oldSrc}: Args) => {
+export const uploadImgApi = async (landingId: string,{img, sectionId, data_id}: Args) => {
   try {
 
     const formData = new FormData()
@@ -18,7 +18,7 @@ export const uploadImgApi = async (landingId: string,{img, sectionId, oldSrc}: A
       },
       params: {
         sectionId,
-        oldSrc
+        data_id
       }
     })
 
