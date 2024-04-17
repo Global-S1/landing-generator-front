@@ -7,7 +7,7 @@ import { Sidebar } from "@/components/sidebar";
 import { APILandingExistResponse, APIResponse } from "@/interfaces";
 import { useGeneratePageStore } from "@/store";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function GeneratorPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -18,17 +18,24 @@ export default function GeneratorPage({ params }: { params: { id: string } }) {
   const setLandingId = useGeneratePageStore((state) => state.setLandingId);
   const setSections = useGeneratePageStore((state) => state.setSections);
 
+
+  const handleGoBack = () => {
+    
+    setPageHtml('')
+    router.push('/')
+  }
+
   useEffect(() => {
     if (html) return;
 
     LandingGeneratorApi.get<APIResponse>(`/${params.id}`)
       .then(resp => {
         const data = resp.data
-
         if (data.template) {
           setLandingId(data.id)
           setPageHtml(data.template);
           setSections(data.sections)
+          router.refresh()
         } else {
           router.push("/");
         }
@@ -40,8 +47,9 @@ export default function GeneratorPage({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <div className="p-4">
+      <div className="p-4 flex flex-row justify-between">
         <Logo />
+        <button className="btn" onClick={handleGoBack}>Back</button>
       </div>
       <div className="grid grid-cols-[400px_1fr] h-[90vh]">
         <Sidebar />

@@ -68,5 +68,6 @@
   width: 100%;
 }
 .element-select{
-  border: 3px solid rgb(0, 157, 255)
+  background-color: rgb(193, 218, 238);
+  border-radius: 5px;
 }
