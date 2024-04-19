@@ -1,9 +1,15 @@
-import { Landing } from "@/components/landing/Landing";
-import React from "react";
+import { Landing } from "@/landing/components/Landing";
+import { Sidebar } from "@/landing/components/sidebar/Sidebar";
 
 export default async function EditPage() {
 
   return (
-    <Landing/>
+    <main>
+
+      <Sidebar />
+      <div className={`ms-[400px]`}>
+        <Landing />
+      </div>
+    </main>
   );
 }
