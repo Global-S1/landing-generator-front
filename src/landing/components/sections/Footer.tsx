@@ -1,7 +1,7 @@
 
 export const Footer = () => {
   return (
-    <footer className="bg-black text-white py-20">
+    <footer id="footer" className="bg-black text-white py-20">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
         <p className="text-sm">&copy; 2024 Nombre de la Empresa. Todos los derechos reservados.</p>
         <ul className="flex space-x-4">

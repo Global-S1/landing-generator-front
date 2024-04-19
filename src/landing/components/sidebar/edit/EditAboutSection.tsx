@@ -42,34 +42,34 @@ export const EditAboutSection = () => {
         })
     }, [formState])
     return (
-        <section className="flex flex-col p-2 gap-2">
+        <section className="flex flex-col p-2 gap-4">
             <input
-                className="w-full p-[4px]"
+                className="input"
                 type="text"
-                placeholder="Hero title"
+                placeholder="Title"
                 value={formState.title}
                 name="title"
                 onChange={onInputChange} />
             <textarea
-                className="w-full p-[4px] resize-none"
+                className="input resize-none"
                 cols={30}
                 rows={4}
                 spellCheck={false}
-                placeholder="Hero title"
+                placeholder="Description"
                 value={formState.description}
                 name="description"
                 onChange={onTextareChange} />
             <input
-                className="w-full p-[4px]"
+                className="input"
                 type="text"
-                placeholder="Hero title"
+                placeholder="Img src"
                 value={formState.imgSrc}
                 name="imgSrc"
                 onChange={onInputChange} />
             <input
-                className="w-full p-[4px]"
+                className="input"
                 type="text"
-                placeholder="Hero title"
+                placeholder="Img alt"
                 value={formState.imgAlt}
                 name="imgAlt"
                 onChange={onInputChange} />

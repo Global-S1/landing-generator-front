@@ -58,16 +58,16 @@ export const EditHeroSection = () => {
     }, [formState])
 
     return (
-        <section className="flex flex-col p-2 gap-2">
+        <section className="flex flex-col p-2 gap-4">
             <input
-                className="w-full p-[4px]"
+                className="input"
                 type="text"
                 placeholder="Hero title"
                 value={formState.title}
                 name="title"
                 onChange={onInputChange} />
             <textarea
-                className="w-full p-[4px] resize-none"
+                className="input resize-none"
                 cols={30}
                 rows={4}
                 spellCheck={false}
@@ -76,28 +76,28 @@ export const EditHeroSection = () => {
                 name="description"
                 onChange={onTextareChange} />
             <input
-                className="w-full p-[4px]"
+                className="input"
                 type="text"
                 placeholder="Hero title"
                 value={formState.buttonText}
                 name="buttonText"
                 onChange={onInputChange} />
             <input
-                className="w-full p-[4px]"
+                className="input"
                 type="text"
                 placeholder="Hero title"
                 value={formState.buttonLink}
                 name="buttonLink"
                 onChange={onInputChange} />
-            <input
-                className="w-full p-[4px]"
+            {/* <input
+                className="input"
                 type="text"
                 placeholder="Hero title"
                 value={formState.imgSrc}
                 name="imgSrc"
-                onChange={onInputChange} />
+                onChange={onInputChange} /> */}
             <input
-                className="w-full p-[4px]"
+                className="input"
                 type="text"
                 placeholder="Hero title"
                 value={formState.imgAlt}

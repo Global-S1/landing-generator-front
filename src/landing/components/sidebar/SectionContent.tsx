@@ -1,9 +1,6 @@
 import { SectionType } from "@/interfaces"
-import { EditHeroSection } from "./edit/EditHeroSection"
-import { EditAboutSection } from "./edit/EditAboutSection"
-import { EditFeaturesSection } from "./edit/EditFeaturesSection"
-import { EditFaqSection } from "./edit/EditFaqSection"
-import { EditCtaSection } from "./edit/EditCtaSection"
+import { EditHeroSection, EditAboutSection, EditFeaturesSection, EditCtaSection, EditFaqSection } from "./edit"
+
 
 export const SectionContent = ({ sectionId }: { sectionId: SectionType }) => {
 
