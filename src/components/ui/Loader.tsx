@@ -1,5 +1,5 @@
 
-export const LoaderEditSecion = () => {
+export const Loader = () => {
     return (
         <div className="bg-gray-200 opacity-50 w-full h-full absolute flex justify-center items-center">
             <div

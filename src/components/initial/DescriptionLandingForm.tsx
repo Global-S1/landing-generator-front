@@ -1,10 +1,8 @@
 "use client";
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { useDataToStore } from "@/store";
 
 export const DescriptionLandingForm = () => {
-  const setPrompt = useDataToStore((state) => state.setPrompt);
 
   const router = useRouter();
 
@@ -15,7 +13,6 @@ export const DescriptionLandingForm = () => {
     const desc = formData.get("description");
 
     const prompt = `Mi pagina se llama ${title}, ${desc}`;
-    setPrompt(prompt);
     router.push("/started/templates");
   }
 

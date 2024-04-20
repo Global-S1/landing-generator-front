@@ -5,7 +5,6 @@ export default async function EditPage() {
 
   return (
     <main>
-
       <Sidebar />
       <div className={`ms-[400px]`}>
         <Landing />
