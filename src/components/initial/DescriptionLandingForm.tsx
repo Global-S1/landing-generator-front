@@ -13,7 +13,10 @@ export const DescriptionLandingForm = () => {
     const desc = formData.get("description");
 
     const prompt = `Mi pagina se llama ${title}, ${desc}`;
-    router.push("/started/templates");
+
+    console.log({
+      title, prompt
+    })
   }
 
 
