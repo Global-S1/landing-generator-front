@@ -5,11 +5,8 @@ import { create } from "zustand";
 interface ChangeHeroContent extends Partial<HeroSectionProps> { }
 interface ChangeAboutContent extends Partial<AboutSectionProps> { }
 interface ChangeCtaContent extends Partial<CtaSectionProps> { }
-interface ChangeFeatureItemContent{
-    title?: string;
-    description?: string;
-}
-interface ChangeFaqItemContent{
+interface ChangeFeatureItemContent extends Partial<Feature> { }
+interface ChangeFaqItemContent {
     question?: string;
     answer?: string;
 }
@@ -18,14 +15,14 @@ interface State {
     changeHeroContent: (value: ChangeHeroContent) => void;
     changeAboutContent: (value: ChangeAboutContent) => void;
     changeCtaContent: (value: ChangeCtaContent) => void;
-    
+
     // feature
-    changeFeatureItemContent: (oldTitle: string ,value: ChangeFeatureItemContent) => void;
+    changeFeatureItemContent: (oldTitle: string, value: ChangeFeatureItemContent) => void;
     addNewFeature: (value: Feature) => void;
     deleteFeature: (value: string) => void;
-    
+
     // faq
-    changeFaqItemContent: (oldQuestion: string ,value: ChangeFaqItemContent) => void;
+    changeFaqItemContent: (oldQuestion: string, value: ChangeFaqItemContent) => void;
     addNewFaqItem: (value: FaqItem) => void;
     deleteFaqItem: (value: string) => void;
 }
@@ -62,13 +59,13 @@ export const useLandingContentStore = create<State>((set) => ({
     })),
 
     // Feature
-    changeFeatureItemContent: (oldTitle: string ,value: ChangeFeatureItemContent) => set(({landing}) => ({
+    changeFeatureItemContent: (oldTitle: string, value: ChangeFeatureItemContent) => set(({ landing }) => ({
         landing: {
             ...landing,
             features: {
                 ...landing.features,
-                features: landing.features.features.map( f => {
-                    if(f.title.trim() === oldTitle.trim()){
+                features: landing.features.features.map(f => {
+                    if (f.title.trim() === oldTitle.trim()) {
                         const updatedFeature = {
                             ...f,
                             ...value
@@ -89,25 +86,25 @@ export const useLandingContentStore = create<State>((set) => ({
             }
         }
     })),
-    deleteFeature: (value: string) => set(({landing})=> ({
+    deleteFeature: (value: string) => set(({ landing }) => ({
         landing: {
             ...landing,
             features: {
                 ...landing.features,
-                features: landing.features.features.filter( f => f.title.trim() !== value.trim())
+                features: landing.features.features.filter(f => f.title.trim() !== value.trim())
             }
         }
     })),
-    
-    
+
+
     // Faq
-    changeFaqItemContent: (oldQuestion: string, value: ChangeFaqItemContent) => set(({landing}) => ({
+    changeFaqItemContent: (oldQuestion: string, value: ChangeFaqItemContent) => set(({ landing }) => ({
         landing: {
             ...landing,
             faq: {
                 ...landing.faq,
-                faqData: landing.faq.faqData.map( f => {
-                    if(f.question.trim() === oldQuestion.trim()){
+                faqData: landing.faq.faqData.map(f => {
+                    if (f.question.trim() === oldQuestion.trim()) {
                         const updatedFaqItem = {
                             ...f,
                             ...value
@@ -128,12 +125,12 @@ export const useLandingContentStore = create<State>((set) => ({
             }
         }
     })),
-    deleteFaqItem: (value: string) => set(({landing}) => ({
+    deleteFaqItem: (value: string) => set(({ landing }) => ({
         landing: {
             ...landing,
             faq: {
                 ...landing.faq,
-                faqData: landing.faq.faqData.filter( f => f.question.trim() !== value.trim())
+                faqData: landing.faq.faqData.filter(f => f.question.trim() !== value.trim())
             }
         }
     }))

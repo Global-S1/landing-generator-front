@@ -1,15 +1,16 @@
 import { Feature } from "@/landing/interfaces"
 import { useLandingContentStore } from "@/store";
+import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react"
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { MdDeleteOutline } from "react-icons/md";
 
-interface Props{
+interface Props {
     title: string;
     feature: Feature;
 }
 
-export const EditFeatureItem = ({title, feature}: Props) => {
+export const EditFeatureItem = ({ title, feature }: Props) => {
     const deleteFeature = useLandingContentStore(state => state.deleteFeature);
     const [show, setShow] = useState(false);
 
@@ -27,7 +28,7 @@ export const EditFeatureItem = ({title, feature}: Props) => {
                     onClick={() => setShow(!show)}
                 >
                     <span>
-                        { title }
+                        {title}
                     </span>
 
                     {show ? <IoIosArrowUp /> : <IoIosArrowDown />}
@@ -47,7 +48,7 @@ export const EditFeatureItem = ({title, feature}: Props) => {
 
 export const EditFeatureContent = (feature: Feature) => {
 
-    const changeFeatureContent = useLandingContentStore( state => state.changeFeatureItemContent);
+    const changeFeatureContent = useLandingContentStore(state => state.changeFeatureItemContent);
     const [formState, setFormState] = useState({
         title: feature.title,
         description: feature.description
@@ -70,17 +71,32 @@ export const EditFeatureContent = (feature: Feature) => {
         })
     }
 
+    const [image, setImage] = useState('')
+
+    const handleChageInputFile = (event: ChangeEvent<HTMLInputElement>) => {
+        const files = (event.target as HTMLInputElement).files
+        if (files) {
+            const imgUrl = URL.createObjectURL(files[0])
+            setImage(imgUrl)
+            changeFeatureContent(feature.title, {
+                img: {
+                    alt: feature.img.alt,
+                    src: imgUrl
+                }
+            })
+        }
+    }
+
     useEffect(() => {
 
         changeFeatureContent(
             feature.title,
             {
-            title: formState.title,
-            description: formState.description,
-        })
+                title: formState.title,
+                description: formState.description,
+            })
 
     }, [formState])
-    
 
     return (
         <div className="flex flex-col gap-4 p-2 overflow-hidden">
@@ -106,6 +122,22 @@ export const EditFeatureContent = (feature: Feature) => {
                     value={formState.description}
                     name="description"
                     onChange={onTextareChange} />
+            </div>
+            <div>
+                <input
+                    className="block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 focus:outline-none rounded-s"
+                    id="file_input"
+                    type="file"
+                    onChange={handleChageInputFile}
+                />
+                <div className="mt-4">
+                    <Image
+                        src={feature.img.src}
+                        width={100} height={100}
+                        alt='image hero'
+                    />
+                </div>
+
             </div>
         </div>
     )

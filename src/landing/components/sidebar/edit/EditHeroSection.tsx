@@ -38,7 +38,15 @@ export const EditHeroSection = () => {
     const handleChageInputFile = (event: ChangeEvent<HTMLInputElement>) => {
         const files = (event.target as HTMLInputElement).files
         if (files) {
-            setImage(URL.createObjectURL(files[0]))
+            const imgUrl = URL.createObjectURL(files[0])
+
+            setImage(imgUrl)
+            changeHeroContent({
+                img: {
+                    src: imgUrl,
+                    alt: formState.imgAlt
+                }
+            })
         }
     }
 
@@ -89,13 +97,6 @@ export const EditHeroSection = () => {
                 value={formState.buttonLink}
                 name="buttonLink"
                 onChange={onInputChange} />
-            {/* <input
-                className="input"
-                type="text"
-                placeholder="Hero title"
-                value={formState.imgSrc}
-                name="imgSrc"
-                onChange={onInputChange} /> */}
             <input
                 className="input"
                 type="text"
@@ -109,7 +110,9 @@ export const EditHeroSection = () => {
                 type="file"
                 onChange={handleChageInputFile}
             />
-            {image && <Image src={image} width={100} height={100} alt='image hero' />}
+            <div className="mt-4">
+                <Image src={img.src} width={100} height={100} alt='image hero' />
+            </div>
         </section>
     )
 }

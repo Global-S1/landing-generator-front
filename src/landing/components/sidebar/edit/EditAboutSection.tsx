@@ -1,4 +1,5 @@
 import { useLandingContentStore } from "@/store";
+import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
 
 export const EditAboutSection = () => {
@@ -31,6 +32,22 @@ export const EditAboutSection = () => {
         })
     }
 
+    const [image, setImage] = useState('')
+
+    const handleChageInputFile = (event: ChangeEvent<HTMLInputElement>) => {
+        const files = (event.target as HTMLInputElement).files
+        if (files) {
+            const imgUrl = URL.createObjectURL(files[0])
+
+            setImage(imgUrl)
+            changeAboutContent({
+                img: {
+                    src: imgUrl,
+                    alt: formState.imgAlt
+                }
+            })
+        }
+    }
     useEffect(() => {
         changeAboutContent({
             title: formState.title,
@@ -41,6 +58,7 @@ export const EditAboutSection = () => {
             }
         })
     }, [formState])
+
     return (
         <section className="flex flex-col p-2 gap-4">
             <input
@@ -62,17 +80,19 @@ export const EditAboutSection = () => {
             <input
                 className="input"
                 type="text"
-                placeholder="Img src"
-                value={formState.imgSrc}
-                name="imgSrc"
-                onChange={onInputChange} />
-            <input
-                className="input"
-                type="text"
                 placeholder="Img alt"
                 value={formState.imgAlt}
                 name="imgAlt"
                 onChange={onInputChange} />
+            <input
+                className="block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 focus:outline-none rounded-s"
+                id="file_input"
+                type="file"
+                onChange={handleChageInputFile}
+            />
+            <div className="mt-4">
+                <Image src={img.src} width={100} height={100} alt='image hero' />
+            </div>
         </section>
     )
 }

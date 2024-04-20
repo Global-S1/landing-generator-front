@@ -3,7 +3,7 @@ import { useLandingContentStore } from "@/store";
 import { SectionItem } from "./SectionItem";
 import { SectionType } from "@/interfaces";
 import { BtnExport } from "./BtnExport";
-import Link from "next/link";
+import { prepareData } from "@/landing/data/prepareData";
 
 export const Sidebar = () => {
     const landing = useLandingContentStore(state => state.landing)
@@ -18,6 +18,7 @@ export const Sidebar = () => {
                     ))
                 }
             </section>
+            <button onClick={() => prepareData()}>some</button>
             <BtnExport />
         </aside>
     )
