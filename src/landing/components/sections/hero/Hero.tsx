@@ -1,4 +1,4 @@
-import { HeroSectionProps } from "../../interfaces"
+import { HeroSectionProps } from "../../../interfaces"
 
 export const HeroSection = ({ title, description, img, button }: HeroSectionProps) => {
     return (

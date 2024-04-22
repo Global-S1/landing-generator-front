@@ -1,33 +1,12 @@
 import { useLandingStore } from "@/store";
-import { ChangeEvent, useEffect, useState } from "react";
 import { EditFaqItem } from "./EditFaqItem";
 import { FaqItem } from "@/landing/interfaces";
+import { DisplaySection } from "../DisplaySection";
+import { useForm } from "@/hooks";
 
 export const EditFaqSection = () => {
-    const landing = useLandingStore(state => state.landing);
-    const addNewFaqItem = useLandingStore(state => state.addNewFaqItem);
-    const { title, faqData } = landing.faq;
-
-    const [formState, setFormState] = useState({
-        title,
-    })
-
-    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
-    const onTextareChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
+    const {landing, addNewFaqItem} = useLandingStore(state => state);
+    const { faqData } = landing.faq;
 
     const handleAddNewFaqItem = () => {
         const newFaqItem: FaqItem = {
@@ -38,20 +17,10 @@ export const EditFaqSection = () => {
         addNewFaqItem(newFaqItem);
     }
 
-    useEffect(() => {
-
-
-    }, [formState])
-
     return (
         <section className="flex flex-col p-2 gap4">
-            {/* <input
-                className="input"
-                type="text"
-                placeholder="Hero title"
-                value={formState.title}
-                name="title"
-                onChange={onInputChange} /> */}
+            <DisplaySection sectionId="faq"/>
+
             <div className="flex flex-col items-start gap-2">
                 {
                     faqData.map((item, index) => (

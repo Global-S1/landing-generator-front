@@ -4,30 +4,28 @@ import { useRouter } from "next/navigation";
 import { Logo } from "../ui"
 import { BtnExport } from "./BtnExport"
 import { useLandingStore } from "@/store";
-import { landingContent } from "@/landing/data";
 import { updateLandingContent } from "@/landing/actions";
 import { LandingContent } from "@/landing/interfaces";
 
 export const TopBar = () => {
 
     const router = useRouter();
-    const setLandingContent = useLandingStore(state => state.setLandingContent);
-    const setServerLanding = useLandingStore(state => state.setServerLanding);
-    const landingId = useLandingStore(state => state.id);
-    const landing = useLandingStore(state => state.landing);
-    const serverLanding = useLandingStore(state => state.serverLanding);
+    const {
+        id: landingId,
+        landing,
+        serverLanding,
 
-    const background = JSON.stringify(landing) == JSON.stringify(serverLanding) ? 'bg-green-600' : 'bg-blue-600'
+        setLandingContent,
+        resetLandingStore,
+        setServerLanding
+    } = useLandingStore(state => state);
 
-    const handleGoBack = () => {
-        setLandingContent('', landingContent);
-        router.push('/home')
-    }
+    const update = JSON.stringify(landing) == JSON.stringify(serverLanding)
+    const background = update ? 'bg-green-600' : 'bg-blue-600'
+    const updateText = update ? 'Actualizado' : 'Guardar cambios'
 
     async function updateContent() {
-
-        const upadate = JSON.stringify(landing) == JSON.stringify(serverLanding)
-        if (upadate) return;
+        if (update) return;
 
         updateLandingContent(landingId, landing)
             .then(updatedLanding => {
@@ -36,16 +34,21 @@ export const TopBar = () => {
             })
     }
 
+    const handleGoBack = () => {
+        resetLandingStore();
+        router.push('/home')
+    }
     return (
         <header
             className="fixed z-50 flex flex-row items-center justify-between w-full h-[50px] border-b-[1px] border-gray-600 bg-gray-50 p-2">
             <Logo />
 
             <div className="flex flex-row gap-2">
-                <button className={`py-2 px-4 rounded-md text-white ${background}`} onClick={updateContent}>Guadar</button>
+                <button className={`py-2 px-4 rounded-md text-white ${background}`} onClick={updateContent}>{updateText}</button>
                 <button className="btn" onClick={handleGoBack}>home</button>
                 <BtnExport />
             </div>
         </header>
     )
 }
+

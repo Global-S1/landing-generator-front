@@ -1,18 +1,28 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import Image from 'next/image';
-import { useLandingStore } from '@/store'
+import { useDesignStore, useLandingStore } from '@/store'
 import { FaCloudUploadAlt } from 'react-icons/fa';
-import { upadateSectionImg } from '@/landing/actions';
+import { upadateSectionImg, updateSectionsLayout } from '@/landing/actions';
 import { LandingContent } from '@/landing/interfaces';
 import { useForm } from '@/hooks';
+import { SectionsLayout } from '@/interfaces';
+import { SiCodemagic } from 'react-icons/si';
 
 export const EditHeroSection = () => {
 
-    const landingId = useLandingStore(state => state.id);
-    const landing = useLandingStore(state => state.landing);
-    const setLandingContent = useLandingStore(state => state.setLandingContent);
-    const changeHeroContent = useLandingStore(state => state.changeHeroContent);
+    const {
+        id: landingId,
+        landing,
+        sectionsLayout,
+
+        setSectionsLayout,
+        changeSectionLayout,
+        setLandingContent,
+        changeHeroContent
+    } = useLandingStore(state => state);
     const { title, description, img, button } = landing.hero;
+
+    const heroOption = useDesignStore(state => state.heroOption);
 
     const { formState, onInputChange, onTextAreaChange } = useForm({
         title,
@@ -71,6 +81,20 @@ export const EditHeroSection = () => {
             })
     }
 
+    const options = [
+        { name: 'Hero Clasico', option: '1' },
+        { name: 'Imagen de fondo', option: '2' },
+        { name: 'Full screen', option: '3' },
+    ];
+    const [sendDB, setSendDB] = useState(false)
+    const onOptionChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
+
+        const option = event.target.value;
+        changeSectionLayout('hero', option);
+
+        setSendDB(true);
+    };
+
     useEffect(() => {
         changeHeroContent({
             title: formState.title,
@@ -87,8 +111,32 @@ export const EditHeroSection = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formState])
 
+
+    useEffect(() => {
+        if (sendDB) {
+            updateSectionsLayout(landingId, sectionsLayout)
+                .then(updatedLanding => {
+                    setSectionsLayout(updatedLanding.sectionsLayout as unknown as SectionsLayout);
+
+                    setSendDB(false);
+                })
+        }
+    }, [sendDB])
+
     return (
         <section className="flex flex-col p-2 gap-4">
+
+            <div className="flex flex-col gap-2">
+                <span className="font-bold">Elije un diseño</span>
+                <select className='input' onChange={onOptionChangeHandler} defaultValue={heroOption} >
+                    {options.map(option => (
+                        <option key={option.option} value={option.option}>
+                            {option.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
             <input
                 className="input"
                 type="text"
@@ -128,7 +176,7 @@ export const EditHeroSection = () => {
                 onChange={onInputChange} />
             <div className="flex flex-row items-center gap-2 mb-2">
                 <input
-                    className="block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 focus:outline-none rounded-s"
+                    className="block w-full h-10 place-content-center text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 focus:outline-none rounded-s"
                     id="file_input"
                     type="file"
                     onChange={handleChageInputFile}
@@ -141,6 +189,12 @@ export const EditHeroSection = () => {
                     <FaCloudUploadAlt />
                 </button>
             </div>
+            <button
+                className="flex fle-row gap-4 p-2 rounded-md justify-center items-center font-bold border-[1px] border-purple-500 text-purple-500"
+            >
+                Crear imagen con AI
+                <SiCodemagic />
+            </button>
             {
                 imgErrMsg
                 &&

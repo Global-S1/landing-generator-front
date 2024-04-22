@@ -1,8 +1,7 @@
 'use server';
 
 import OpenAI from 'openai';
-import { landingContentExample } from './landingContenExample';
-import { LandingContent } from '../interfaces';
+import { landingContentExample } from '../data/exampleToPrompt';
 import { CreateLandingDto, createLanding } from './landing-actions';
 
 const api_key = process.env.OPENAI_API_KEY;

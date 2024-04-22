@@ -1,17 +1,27 @@
 'use client';
 
 import { useEffect } from "react";
+import { useDesignStore, useLandingStore } from "@/store";
 import { SkeletonEditPage, TopBar } from "@/components";
 import { getLanding } from "@/landing/actions";
 import { Landing, Sidebar } from "@/landing/components";
 import { LandingContent } from "@/landing/interfaces";
-import { useLandingStore } from "@/store";
+import { SectionsLayout } from "@/interfaces";
 
 export default function EditPage({ params }: { params: { id: string } }) {
 
   const landingId = useLandingStore(state => state.id);
-  const setLandingContent = useLandingStore(state => state.setLandingContent);
-  const setServerLanding = useLandingStore(state => state.setServerLanding);
+  const {
+sectionsLayout,
+
+    setLandingContent,
+    setTitle,
+    setServerLanding,
+    setSectionsLayout
+  } = useLandingStore(state => state);
+
+  const setHeroOption = useDesignStore(state => state.setHeroOption);
+
 
   useEffect(() => {
     if (landingId === params.id) return
@@ -20,9 +30,20 @@ export default function EditPage({ params }: { params: { id: string } }) {
       .then(landing => {
         if (!landing) return;
         setLandingContent(landing.id, landing.content as unknown as LandingContent);
-        setServerLanding(landing.content as unknown as LandingContent)
+        setServerLanding(landing.content as unknown as LandingContent);
+        setTitle(landing.title);
+        setSectionsLayout(landing.sectionsLayout as unknown as SectionsLayout);
+        localStorage.setItem('sectionsLayout', JSON.stringify(sectionsLayout));
       })
   }, [])
+
+
+  useEffect(() => {
+    
+    setHeroOption(sectionsLayout.hero.id)
+
+  }, [sectionsLayout])
+  
 
   return (
     <>

@@ -1,36 +1,24 @@
+import { useForm } from "@/hooks";
 import { useLandingStore } from "@/store";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
+import { DisplaySection } from "./DisplaySection";
 
 export const EditAboutSection = () => {
 
-    const landing = useLandingStore(state => state.landing);
-    const changeAboutContent = useLandingStore(state => state.changeAboutContent);
+    const {
+        landing,
+        sectionsLayout,
+        changeAboutContent
+    } = useLandingStore(state => state);
     const { title, description, img } = landing.about;
 
-    const [formState, setFormState] = useState({
+    const { formState, onInputChange, onTextAreaChange } = useForm({
         title,
         description,
         imgSrc: img.src,
         imgAlt: img.alt,
     })
-
-    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
-    const onTextareChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
 
     const [image, setImage] = useState('')
 
@@ -61,6 +49,9 @@ export const EditAboutSection = () => {
 
     return (
         <section className="flex flex-col p-2 gap-4">
+           
+           <DisplaySection sectionId="about"/>
+          
             <input
                 className="input"
                 type="text"
@@ -76,7 +67,7 @@ export const EditAboutSection = () => {
                 placeholder="Description"
                 value={formState.description}
                 name="description"
-                onChange={onTextareChange} />
+                onChange={onTextAreaChange} />
             <input
                 className="input"
                 type="text"

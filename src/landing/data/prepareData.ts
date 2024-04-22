@@ -1,4 +1,4 @@
-import { landingContent } from ".";
+import { landingContent } from "./landingContentExample";
 import { FaqItem, Feature, LandingContent } from "../interfaces";
 
 export const prepareData = () => {

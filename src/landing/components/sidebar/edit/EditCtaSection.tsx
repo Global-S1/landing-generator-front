@@ -1,34 +1,19 @@
 import { useLandingStore } from "@/store";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect } from "react";
+import { DisplaySection } from "./DisplaySection";
+import { useForm } from "@/hooks";
 
 export const EditCtaSection = () => {
     const landing = useLandingStore(state => state.landing);
     const changeCtaContent = useLandingStore(state => state.changeCtaContent);
     const { title, description, button } = landing.cta;
 
-    const [formState, setFormState] = useState({
+    const {formState, onInputChange, onTextAreaChange} = useForm({
         title,
         description,
         buttonText: button.text,
         buttonLink: button.link,
     })
-
-    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
-    const onTextareChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
 
     useEffect(() => {
 
@@ -45,6 +30,8 @@ export const EditCtaSection = () => {
 
     return (
         <section className="flex flex-col p-2 gap-4">
+           <DisplaySection sectionId="cta"/>
+
             <input
                 className="input"
                 type="text"
@@ -60,7 +47,7 @@ export const EditCtaSection = () => {
                 placeholder="Description"
                 value={formState.description}
                 name="description"
-                onChange={onTextareChange} />
+                onChange={onTextAreaChange} />
             <input
                 className="input"
                 type="text"

@@ -1,34 +1,11 @@
 import { useLandingStore } from "@/store";
-import { ChangeEvent, useEffect, useState } from "react";
 import { EditFeatureItem } from "./EditFeatureItem";
-
+import { DisplaySection } from "../DisplaySection";
 
 export const EditFeaturesSection = () => {
 
-    const landing = useLandingStore(state => state.landing);
-    const addNewFeature = useLandingStore(state => state.addNewFeature);
-    const { title, features } = landing.features;
-
-    const [formState, setFormState] = useState({
-        title,
-    })
-
-    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
-    const onTextareChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
+    const {landing, addNewFeature} = useLandingStore(state => state);
+    const { features } = landing.features;
 
     const handleAddNewFeature = () => {
         const newFeature = {
@@ -42,21 +19,10 @@ export const EditFeaturesSection = () => {
         addNewFeature(newFeature)
     }
 
-    useEffect(() => {
-
-        //todo: Actualizar contenido
-
-    }, [formState])
-
     return (
         <section className="flex flex-col p-2 gap-4">
-            {/* <input
-                className="input"
-                type="text"
-                placeholder="Hero title"
-                value={formState.title}
-                name="title"
-                onChange={onInputChange} /> */}
+            <DisplaySection sectionId="features"/>
+            
             <div className="flex flex-col items-start gap-2">
                 {
                     features.map((feature, index) => (

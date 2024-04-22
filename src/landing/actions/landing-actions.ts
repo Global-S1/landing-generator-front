@@ -6,7 +6,7 @@ import { getUserServerSession } from "@/auth/actions/getUserSession";
 import prisma from "@/lib/prisma";
 import { LandingContent } from "../interfaces";
 import { redirect } from "next/navigation";
-import { SectionType } from "@/interfaces";
+import { SectionType, SectionsLayout } from "@/interfaces";
 
 export interface CreateLandingDto {
     content: LandingContent;
@@ -20,17 +20,28 @@ export const createLanding = async (data: CreateLandingDto) => {
         redirect('/api/auth/signin')
     };
 
+    const sectionsLayout = {
+        hero: { id: '1' },
+        about: { id: '1', status: true },
+        features: { id: '1', status: true },
+        faq: { id: '1', status: true },
+        cta: { id: '1', status: true },
+        footer: { id: '1', status: true },
+    }
+
     const landing = await prisma.landing.create({
         data: {
             initialp_prompt: data.initialp_prompt,
             title: data.title,
             content: data.content as any,
+            sectionsLayout,
             userId: user.id
         }
     })
 
     return landing;
 }
+
 export const updateLandingContent = async (landingId: string, content: LandingContent) => {
     const user = await getUserServerSession();
     if (!user) {
@@ -39,7 +50,7 @@ export const updateLandingContent = async (landingId: string, content: LandingCo
 
     const landingExist = await prisma.landing.findUnique({ where: { id: landingId, userId: user.id } });
     if (!landingExist) {
-        throw 'Landing do not exit';
+        throw 'Landing do not exist';
     }
 
     const upadatedLanding = await prisma.landing.update({
@@ -47,6 +58,27 @@ export const updateLandingContent = async (landingId: string, content: LandingCo
         data: {
             content: content as object
         },
+    })
+
+    return upadatedLanding;
+}
+
+export const updateSectionsLayout = async (landingId: string, sectionsLayout: SectionsLayout) => {
+    const user = await getUserServerSession();
+    if (!user) {
+        redirect('/api/auth/signin')
+    }
+
+    const landingExist = await prisma.landing.findUnique({ where: { id: landingId, userId: user.id } });
+    if (!landingExist) {
+        throw 'Landing do not exist';
+    }
+
+    const upadatedLanding = await prisma.landing.update({
+        where: { id: landingId, userId: user.id },
+        data: {
+            sectionsLayout: sectionsLayout as object
+        }
     })
 
     return upadatedLanding;
@@ -90,7 +122,7 @@ export const upadateSectionImg = async (landingId: string, section: SectionType,
     const landingExist = await prisma.landing.findUnique({ where: { id: landingId, userId: user.id } });
 
     if (!landingExist) {
-        throw 'Landing do not exit';
+        throw 'Landing do not exist';
     }
 
     const file = formData.get('file') as File;

@@ -34,6 +34,7 @@ model Landing {
   title           String
   initialp_prompt String
   content         Json
+  sectionsLayout  Json
   userId          String @db.ObjectId
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

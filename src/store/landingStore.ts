@@ -1,6 +1,7 @@
-import { landingContent } from "@/landing/data";
-import { AboutSectionProps, CtaSectionProps, FaqItem, Feature, HeroSectionProps, LandingContent } from "@/landing/interfaces";
 import { create } from "zustand";
+import { SectionType, SectionsLayout } from "@/interfaces";
+import { landingContent, sectionsLayoutExample } from "@/landing/data";
+import { AboutSectionProps, CtaSectionProps, FaqItem, Feature, HeroSectionProps, LandingContent } from "@/landing/interfaces";
 
 interface ChangeHeroContent extends Partial<HeroSectionProps> { }
 interface ChangeAboutContent extends Partial<AboutSectionProps> { }
@@ -10,14 +11,23 @@ interface ChangeFaqItemContent {
     question?: string;
     answer?: string;
 }
-interface State {
+interface LandingState {
     id: string;
+    title: string;
     landing: LandingContent;
     serverLanding: LandingContent;
+    sectionsLayout: SectionsLayout;
 
+    // initail methods
+    setTitle: (value: string) => void;
     setServerLanding: (content: LandingContent) => void;
-
     setLandingContent: (id: string, content: LandingContent) => void;
+    setSectionsLayout: (value: SectionsLayout) => void;
+
+    resetLandingStore:() => void;
+
+    changeSectionLayout: (section: SectionType ,value: string) => void;
+
     changeHeroContent: (value: ChangeHeroContent) => void;
     changeAboutContent: (value: ChangeAboutContent) => void;
     changeCtaContent: (value: ChangeCtaContent) => void;
@@ -33,13 +43,27 @@ interface State {
     deleteFaqItem: (value: string) => void;
 }
 
-export const useLandingStore = create<State>((set) => ({
+export const useLandingStore = create<LandingState>((set) => ({
     id: '',
     landing: landingContent,
     serverLanding: landingContent,
+    title: '',
+    sectionsLayout: sectionsLayoutExample,
 
+    //* methods
+    setTitle: (value: string) => set({
+        title: value
+    }),
     setServerLanding: (content: LandingContent) => set({
         serverLanding: content
+    }),
+    setSectionsLayout: (value: SectionsLayout) => set({
+        sectionsLayout:{...value}
+    }),
+    resetLandingStore: () => set({
+        id: '',
+        landing: landingContent,
+        serverLanding: landingContent,
     }),
 
     setLandingContent: (idValue: string, content: LandingContent) => set({
@@ -47,7 +71,18 @@ export const useLandingStore = create<State>((set) => ({
 
         landing: { ...content }
     }),
+    
+    changeSectionLayout: (section: SectionType ,value: string) => set(({sectionsLayout}) => ({
+        sectionsLayout: {
+            ...sectionsLayout,
+            [section]: {
+                ...sectionsLayout[section], 
+                id: value
+            }
+        }
+    })),
 
+    //* sections content
     changeHeroContent: (value: ChangeHeroContent) => set(state => ({
         landing: {
             ...state.landing,
@@ -76,7 +111,7 @@ export const useLandingStore = create<State>((set) => ({
         }
     })),
 
-    // Feature
+    //* Feature
     changeFeatureItemContent: (oldTitle: string, value: ChangeFeatureItemContent) => set(({ landing }) => ({
         landing: {
             ...landing,
@@ -115,7 +150,7 @@ export const useLandingStore = create<State>((set) => ({
     })),
 
 
-    // Faq
+    //* Faq
     changeFaqItemContent: (oldQuestion: string, value: ChangeFaqItemContent) => set(({ landing }) => ({
         landing: {
             ...landing,

@@ -12,6 +12,7 @@ export const BtnExport = () => {
 
         let landingBody = ''
 
+        sections.unshift('header')
         sections.forEach(section => {
             const $section = document.getElementById(section)
             if ($section) {
