@@ -1,12 +1,12 @@
 'use server';
 
-import { UploadApiResponse, v2 as cloudinary } from 'cloudinary';
-
 import { getUserServerSession } from "@/auth/actions/getUserSession";
 import prisma from "@/lib/prisma";
 import { LandingContent } from "../interfaces";
 import { redirect } from "next/navigation";
 import { SectionType, SectionsLayout } from "@/interfaces";
+import { CLOUDINARY_FOLDER, cloudinary } from "@/config";
+import { UploadApiResponse } from "cloudinary";
 
 export interface CreateLandingDto {
     content: LandingContent;
@@ -106,12 +106,6 @@ export const getLanding = async (id: string) => {
 }
 
 
-cloudinary.config({
-    cloud_name: 'dqwojznyw',
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
-const CLOUDINARY_FOLDER = 'LANDING-AI';
 
 export const upadateSectionImg = async (landingId: string, section: SectionType, content: LandingContent, formData: FormData) => {
     const user = await getUserServerSession();

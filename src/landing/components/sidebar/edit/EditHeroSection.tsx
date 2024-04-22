@@ -1,12 +1,12 @@
-import { ChangeEvent, useEffect, useState } from 'react'
 import Image from 'next/image';
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useDesignStore, useLandingStore } from '@/store'
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import { upadateSectionImg, updateSectionsLayout } from '@/landing/actions';
 import { LandingContent } from '@/landing/interfaces';
 import { useForm } from '@/hooks';
 import { SectionsLayout } from '@/interfaces';
-import { SiCodemagic } from 'react-icons/si';
+import { EditImage } from './EditImage';
 
 export const EditHeroSection = () => {
 
@@ -189,12 +189,7 @@ export const EditHeroSection = () => {
                     <FaCloudUploadAlt />
                 </button>
             </div>
-            <button
-                className="flex fle-row gap-4 p-2 rounded-md justify-center items-center font-bold border-[1px] border-purple-500 text-purple-500"
-            >
-                Crear imagen con AI
-                <SiCodemagic />
-            </button>
+            <EditImage/>
             {
                 imgErrMsg
                 &&

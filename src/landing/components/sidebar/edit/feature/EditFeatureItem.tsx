@@ -1,3 +1,4 @@
+import { useForm } from "@/hooks";
 import { Feature } from "@/landing/interfaces"
 import { useLandingStore } from "@/store";
 import Image from "next/image";
@@ -49,27 +50,11 @@ export const EditFeatureItem = ({ title, feature }: Props) => {
 export const EditFeatureContent = (feature: Feature) => {
 
     const changeFeatureContent = useLandingStore(state => state.changeFeatureItemContent);
-    const [formState, setFormState] = useState({
+    
+    const {formState, onInputChange, onTextAreaChange} = useForm({
         title: feature.title,
         description: feature.description
     })
-
-    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
-    const onTextareChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
 
     const [image, setImage] = useState('')
 
@@ -121,7 +106,7 @@ export const EditFeatureContent = (feature: Feature) => {
                     placeholder="Description"
                     value={formState.description}
                     name="description"
-                    onChange={onTextareChange} />
+                    onChange={onTextAreaChange} />
             </div>
             <div>
                 <input

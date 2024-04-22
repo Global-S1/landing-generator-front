@@ -3,6 +3,7 @@ import { FaqItem } from "@/landing/interfaces"
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { MdDeleteOutline } from "react-icons/md";
 import { useLandingStore } from "@/store";
+import { useForm } from "@/hooks";
 
 interface Props {
     title: string;
@@ -50,27 +51,10 @@ export const FaqContent = (faqItem: FaqItem) => {
 
     const changeFaqItemContent = useLandingStore(state => state.changeFaqItemContent);
 
-    const [formState, setFormState] = useState({
+    const { formState, onInputChange, onTextAreaChange } = useForm({
         question: faqItem.question,
         answer: faqItem.answer
     })
-
-    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
-    const onTextareChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
 
     useEffect(() => {
         changeFaqItemContent(
@@ -104,7 +88,7 @@ export const FaqContent = (faqItem: FaqItem) => {
                     placeholder="answer"
                     value={formState.answer}
                     name="answer"
-                    onChange={onTextareChange} />
+                    onChange={onTextAreaChange} />
             </div>
         </div>
     )
