@@ -1,11 +1,11 @@
-import { useLandingContentStore } from "@/store";
+import { useLandingStore } from "@/store";
 import { ChangeEvent, useEffect, useState } from "react";
 import { EditFaqItem } from "./EditFaqItem";
 import { FaqItem } from "@/landing/interfaces";
 
 export const EditFaqSection = () => {
-    const landing = useLandingContentStore(state => state.landing);
-    const addNewFaqItem = useLandingContentStore(state => state.addNewFaqItem);
+    const landing = useLandingStore(state => state.landing);
+    const addNewFaqItem = useLandingStore(state => state.addNewFaqItem);
     const { title, faqData } = landing.faq;
 
     const [formState, setFormState] = useState({
@@ -58,9 +58,9 @@ export const EditFaqSection = () => {
                         <EditFaqItem key={index} title={`Question ${index + 1}`} faqItem={item} />
                     ))
                 }
-                <button 
-                className="p-2 bg-blue-500 rounded-md text-white"
-                onClick={handleAddNewFaqItem}
+                <button
+                    className="p-2 bg-blue-500 rounded-md text-white"
+                    onClick={handleAddNewFaqItem}
                 >
                     Agregar
                 </button>

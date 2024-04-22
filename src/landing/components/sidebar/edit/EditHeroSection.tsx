@@ -1,53 +1,74 @@
-import { useLandingContentStore } from '@/store'
-import Image from 'next/image';
 import { ChangeEvent, useEffect, useState } from 'react'
+import Image from 'next/image';
+import { useLandingStore } from '@/store'
+import { FaCloudUploadAlt } from 'react-icons/fa';
+import { upadateSectionImg } from '@/landing/actions';
+import { LandingContent } from '@/landing/interfaces';
+import { useForm } from '@/hooks';
 
 export const EditHeroSection = () => {
 
-    const landing = useLandingContentStore(state => state.landing);
-    const changeHeroContent = useLandingContentStore(state => state.changeHeroContent);
+    const landingId = useLandingStore(state => state.id);
+    const landing = useLandingStore(state => state.landing);
+    const setLandingContent = useLandingStore(state => state.setLandingContent);
+    const changeHeroContent = useLandingStore(state => state.changeHeroContent);
     const { title, description, img, button } = landing.hero;
 
-    const [formState, setFormState] = useState({
+    const { formState, onInputChange, onTextAreaChange } = useForm({
         title,
         description,
-        imgSrc: img.src,
         imgAlt: img.alt,
         buttonText: button.text,
         buttonLink: button.link,
     })
 
-    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
-    const onTextareChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-
-        setFormState({
-            ...formState,
-            [name]: value
-        })
-    }
-    const [image, setImage] = useState('')
+    const [fileImg, setFileImg] = useState<File | null>(null)
+    const [imgErrMsg, setImgErrMsg] = useState('')
 
     const handleChageInputFile = (event: ChangeEvent<HTMLInputElement>) => {
         const files = (event.target as HTMLInputElement).files
-        if (files) {
-            const imgUrl = URL.createObjectURL(files[0])
 
-            setImage(imgUrl)
-            changeHeroContent({
-                img: {
-                    src: imgUrl,
-                    alt: formState.imgAlt
-                }
-            })
+        if (files && files.length > 0) {
+            const file = files[0];
+            if (!file.type.includes('image')) {
+                setImgErrMsg('Ingresa una imagen')
+
+                setTimeout(() => {
+                    setImgErrMsg('')
+                }, 3000);
+                return;
+            }
+            if (file instanceof Blob) {
+
+                setFileImg(file)
+            } else {
+                // Manejar caso donde `files[0]` no es un objeto Blob
+                console.error('El archivo seleccionado no es válido.');
+            }
+        } else {
+            // Manejar caso donde no se selecciona ningún archivo
+            console.warn('Ningún archivo seleccionado.');
         }
+    }
+
+    async function uploadImage() {
+        if (!fileImg || !fileImg.type.includes('image')) {
+            setImgErrMsg('Selecciona una imagen')
+
+            setTimeout(() => {
+                setImgErrMsg('')
+            }, 3000);
+            return;
+        };
+
+        console.log('send image to cloud')
+        const formData = new FormData()
+        formData.append('file', fileImg)
+        await upadateSectionImg(landingId, 'hero', landing, formData)
+            .then(updatedLanding => {
+
+                setLandingContent(landingId, updatedLanding.content as unknown as LandingContent);
+            })
     }
 
     useEffect(() => {
@@ -59,10 +80,11 @@ export const EditHeroSection = () => {
                 link: formState.buttonLink
             },
             img: {
-                src: formState.imgSrc,
+                src: img.src,
                 alt: formState.imgAlt
             }
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formState])
 
     return (
@@ -82,7 +104,7 @@ export const EditHeroSection = () => {
                 placeholder="Hero title"
                 value={formState.description}
                 name="description"
-                onChange={onTextareChange} />
+                onChange={onTextAreaChange} />
             <input
                 className="input"
                 type="text"
@@ -104,12 +126,28 @@ export const EditHeroSection = () => {
                 value={formState.imgAlt}
                 name="imgAlt"
                 onChange={onInputChange} />
-            <input
-                className="block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 focus:outline-none rounded-s"
-                id="file_input"
-                type="file"
-                onChange={handleChageInputFile}
-            />
+            <div className="flex flex-row items-center gap-2 mb-2">
+                <input
+                    className="block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 focus:outline-none rounded-s"
+                    id="file_input"
+                    type="file"
+                    onChange={handleChageInputFile}
+                />
+                <button
+                    className="editElement__button"
+                    onClick={uploadImage}
+                    aria-label="Upload image"
+                >
+                    <FaCloudUploadAlt />
+                </button>
+            </div>
+            {
+                imgErrMsg
+                &&
+                <div className="p-4 text-sm text-red-800 rounded-lg bg-red-100" role="alert">
+                    <span className="font-medium">{imgErrMsg}</span>
+                </div>
+            }
             <div className="mt-4">
                 <Image src={img.src} width={100} height={100} alt='image hero' />
             </div>

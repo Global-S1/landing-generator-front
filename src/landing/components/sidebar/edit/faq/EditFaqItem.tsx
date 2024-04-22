@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react"
 import { FaqItem } from "@/landing/interfaces"
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { MdDeleteOutline } from "react-icons/md";
-import { useLandingContentStore } from "@/store";
+import { useLandingStore } from "@/store";
 
 interface Props {
     title: string;
@@ -11,7 +11,7 @@ interface Props {
 
 export const EditFaqItem = ({ title, faqItem }: Props) => {
 
-    const deleteFaqItem = useLandingContentStore(state => state.deleteFaqItem)
+    const deleteFaqItem = useLandingStore(state => state.deleteFaqItem)
     const [show, setShow] = useState(false);
 
     const background = 'bg-gray-300'
@@ -48,7 +48,7 @@ export const EditFaqItem = ({ title, faqItem }: Props) => {
 
 export const FaqContent = (faqItem: FaqItem) => {
 
-    const changeFaqItemContent = useLandingContentStore(state => state.changeFaqItemContent);
+    const changeFaqItemContent = useLandingStore(state => state.changeFaqItemContent);
 
     const [formState, setFormState] = useState({
         question: faqItem.question,
@@ -78,7 +78,7 @@ export const FaqContent = (faqItem: FaqItem) => {
             {
                 question: formState.question,
                 answer: formState.answer
-        })
+            })
     }, [formState])
 
     return (

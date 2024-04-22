@@ -11,7 +11,13 @@ interface ChangeFaqItemContent {
     answer?: string;
 }
 interface State {
+    id: string;
     landing: LandingContent;
+    serverLanding: LandingContent;
+
+    setServerLanding: (content: LandingContent) => void;
+
+    setLandingContent: (id: string, content: LandingContent) => void;
     changeHeroContent: (value: ChangeHeroContent) => void;
     changeAboutContent: (value: ChangeAboutContent) => void;
     changeCtaContent: (value: ChangeCtaContent) => void;
@@ -27,8 +33,20 @@ interface State {
     deleteFaqItem: (value: string) => void;
 }
 
-export const useLandingContentStore = create<State>((set) => ({
+export const useLandingStore = create<State>((set) => ({
+    id: '',
     landing: landingContent,
+    serverLanding: landingContent,
+
+    setServerLanding: (content: LandingContent) => set({
+        serverLanding: content
+    }),
+
+    setLandingContent: (idValue: string, content: LandingContent) => set({
+        id: idValue,
+
+        landing: { ...content }
+    }),
 
     changeHeroContent: (value: ChangeHeroContent) => set(state => ({
         landing: {

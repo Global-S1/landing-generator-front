@@ -12,21 +12,21 @@ export const SectionItem = ({ sectionId }: { sectionId: SectionType }) => {
     const [show, setShow] = useState(false);
     const setSectionSelected = useUiStore(state => state.setSectionSelected);
 
-    const displayContent = () => {  
+    const displayContent = () => {
         setShow(!show)
     }
-    
+
     useEffect(() => {
-        if(show){
+        if (show) {
             setSectionSelected(sectionId)
-      }
+        }
     }, [show])
-    
+
 
     return (
         <>
             <div
-                className="flex justify-between items-center border-[1px] border-gray-400 bg-white rounded-md p-3.5"
+                className="flex justify-between items-center border-[1px] border-gray-400 bg-white rounded-md p-3.5 cursor-pointer"
                 onClick={displayContent}
             >
                 <span className="tex-3xl capitalize">{sectionId}</span>

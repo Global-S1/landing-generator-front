@@ -1,12 +1,12 @@
-import { useLandingContentStore } from "@/store";
+import { useLandingStore } from "@/store";
 import { ChangeEvent, useEffect, useState } from "react";
 import { EditFeatureItem } from "./EditFeatureItem";
 
 
 export const EditFeaturesSection = () => {
 
-    const landing = useLandingContentStore(state => state.landing);
-    const addNewFeature = useLandingContentStore(state => state.addNewFeature);
+    const landing = useLandingStore(state => state.landing);
+    const addNewFeature = useLandingStore(state => state.addNewFeature);
     const { title, features } = landing.features;
 
     const [formState, setFormState] = useState({
@@ -34,7 +34,7 @@ export const EditFeaturesSection = () => {
         const newFeature = {
             title: 'New feature',
             description: 'New description',
-            img:{
+            img: {
                 src: 'https://placehold.co/600x400',
                 alt: 'alt image'
             }
@@ -60,15 +60,15 @@ export const EditFeaturesSection = () => {
             <div className="flex flex-col items-start gap-2">
                 {
                     features.map((feature, index) => (
-                        <EditFeatureItem key={index} title={`Feature ${index +1}`} feature={feature} />
+                        <EditFeatureItem key={index} title={`Feature ${index + 1}`} feature={feature} />
                     ))
                 }
-                <button 
-                className="p-2 bg-blue-500 rounded-md text-white"
-                onClick={handleAddNewFeature}
+                <button
+                    className="p-2 bg-blue-500 rounded-md text-white"
+                    onClick={handleAddNewFeature}
                 >
                     Agregar
-                    </button>
+                </button>
             </div>
         </section>
     )

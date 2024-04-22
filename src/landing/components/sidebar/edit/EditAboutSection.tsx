@@ -1,11 +1,11 @@
-import { useLandingContentStore } from "@/store";
+import { useLandingStore } from "@/store";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
 
 export const EditAboutSection = () => {
 
-    const landing = useLandingContentStore(state => state.landing);
-    const changeAboutContent = useLandingContentStore(state => state.changeAboutContent);
+    const landing = useLandingStore(state => state.landing);
+    const changeAboutContent = useLandingStore(state => state.changeAboutContent);
     const { title, description, img } = landing.about;
 
     const [formState, setFormState] = useState({

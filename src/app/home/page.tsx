@@ -1,9 +1,8 @@
-import { Logo } from "@/components";
-import { getServerSession } from "next-auth";
 import Link from "next/link";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
-import { getUserServerSession } from "@/auth/actions/getUserSession";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import { LandingList, Logo } from "@/components";
 
 export default async function DashboardPage() {
 
@@ -23,6 +22,9 @@ export default async function DashboardPage() {
       <Link href={'/started/prompt'} className="btn">
         Crear Landing
       </Link>
+
+      <LandingList />
+
     </main >
   );
 }

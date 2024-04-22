@@ -1,9 +1,9 @@
-import { useLandingContentStore } from "@/store";
+import { useLandingStore } from "@/store";
 import { ChangeEvent, useEffect, useState } from "react";
 
 export const EditCtaSection = () => {
-    const landing = useLandingContentStore(state => state.landing);
-    const changeCtaContent = useLandingContentStore(state => state.changeCtaContent);
+    const landing = useLandingStore(state => state.landing);
+    const changeCtaContent = useLandingStore(state => state.changeCtaContent);
     const { title, description, button } = landing.cta;
 
     const [formState, setFormState] = useState({

@@ -1,6 +1,6 @@
 'use client';
 
-import { useLandingContentStore, useUiStore } from "@/store";
+import { useLandingStore, useUiStore } from "@/store";
 import { AboutSection } from "./sections/About"
 import { CtaSection } from "./sections/Cta"
 import { FaqSection } from "./sections/Faq"
@@ -13,18 +13,18 @@ import { useRouter } from "next/navigation";
 
 export const Landing = () => {
 
-    const landing = useLandingContentStore(state => state.landing)
+    const landing = useLandingStore(state => state.landing)
     const sectionSelected = useUiStore(state => state.sectionSelected);
 
     const { hero, about, features, faq, cta, footer } = landing;
-const router = useRouter()
+    const router = useRouter()
 
     useEffect(() => {
-        if(sectionSelected){
-            router.push('#'+sectionSelected)
+        if (sectionSelected) {
+            router.push('#' + sectionSelected)
         }
     }, [sectionSelected])
-    
+
 
     return (
         <div id="app">

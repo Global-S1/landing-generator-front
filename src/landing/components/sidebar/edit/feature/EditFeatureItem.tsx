@@ -1,5 +1,5 @@
 import { Feature } from "@/landing/interfaces"
-import { useLandingContentStore } from "@/store";
+import { useLandingStore } from "@/store";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react"
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const EditFeatureItem = ({ title, feature }: Props) => {
-    const deleteFeature = useLandingContentStore(state => state.deleteFeature);
+    const deleteFeature = useLandingStore(state => state.deleteFeature);
     const [show, setShow] = useState(false);
 
     const background = 'bg-gray-300';
@@ -48,7 +48,7 @@ export const EditFeatureItem = ({ title, feature }: Props) => {
 
 export const EditFeatureContent = (feature: Feature) => {
 
-    const changeFeatureContent = useLandingContentStore(state => state.changeFeatureItemContent);
+    const changeFeatureContent = useLandingStore(state => state.changeFeatureItemContent);
     const [formState, setFormState] = useState({
         title: feature.title,
         description: feature.description

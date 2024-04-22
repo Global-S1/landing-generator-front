@@ -1,2 +1,2 @@
-export { useLandingContentStore } from "./landingContentStore";
-export { useUiStore } from "./uiStore";
+export * from "./landingStore";
+export * from "./uiStore";
