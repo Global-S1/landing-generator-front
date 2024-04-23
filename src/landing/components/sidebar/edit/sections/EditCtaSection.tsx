@@ -1,6 +1,6 @@
 import { useLandingStore } from "@/store";
 import { useEffect } from "react";
-import { DisplaySection } from "./DisplaySection";
+import { DisplaySection } from "../DisplaySection";
 import { useForm } from "@/hooks";
 
 export const EditCtaSection = () => {
@@ -8,7 +8,7 @@ export const EditCtaSection = () => {
     const changeCtaContent = useLandingStore(state => state.changeCtaContent);
     const { title, description, button } = landing.cta;
 
-    const {formState, onInputChange, onTextAreaChange} = useForm({
+    const { formState, onInputChange, onTextAreaChange } = useForm({
         title,
         description,
         buttonText: button.text,
@@ -30,7 +30,7 @@ export const EditCtaSection = () => {
 
     return (
         <section className="flex flex-col p-2 gap-4">
-           <DisplaySection sectionId="cta"/>
+            <DisplaySection sectionId="cta" />
 
             <input
                 className="input"

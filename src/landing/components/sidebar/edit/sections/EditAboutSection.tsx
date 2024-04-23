@@ -2,7 +2,7 @@ import { useForm } from "@/hooks";
 import { useLandingStore } from "@/store";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
-import { DisplaySection } from "./DisplaySection";
+import { DisplaySection } from "../DisplaySection";
 
 export const EditAboutSection = () => {
 
@@ -49,9 +49,9 @@ export const EditAboutSection = () => {
 
     return (
         <section className="flex flex-col p-2 gap-4">
-           
-           <DisplaySection sectionId="about"/>
-          
+
+            <DisplaySection sectionId="about" />
+
             <input
                 className="input"
                 type="text"

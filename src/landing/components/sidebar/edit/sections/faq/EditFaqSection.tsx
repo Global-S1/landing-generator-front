@@ -1,11 +1,11 @@
 import { useLandingStore } from "@/store";
 import { EditFaqItem } from "./EditFaqItem";
 import { FaqItem } from "@/landing/interfaces";
-import { DisplaySection } from "../DisplaySection";
+import { DisplaySection } from "../../DisplaySection";
 import { useForm } from "@/hooks";
 
 export const EditFaqSection = () => {
-    const {landing, addNewFaqItem} = useLandingStore(state => state);
+    const { landing, addNewFaqItem } = useLandingStore(state => state);
     const { faqData } = landing.faq;
 
     const handleAddNewFaqItem = () => {
@@ -19,7 +19,7 @@ export const EditFaqSection = () => {
 
     return (
         <section className="flex flex-col p-2 gap4">
-            <DisplaySection sectionId="faq"/>
+            <DisplaySection sectionId="faq" />
 
             <div className="flex flex-col items-start gap-2">
                 {

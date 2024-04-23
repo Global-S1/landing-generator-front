@@ -162,4 +162,44 @@ export const upadateSectionImg = async (landingId: string, section: SectionType,
     // revalidatePath('/edit-page/' + landingId)
     return upadatedLanding;
 }
+export const saveImageAi = async (landingId: string, section: SectionType, content: LandingContent, imageData: string) => {
+    const user = await getUserServerSession();
+    if (!user) {
+        redirect('/api/auth/signin');
+    };
+
+    const landingExist = await prisma.landing.findUnique({ where: { id: landingId, userId: user.id } });
+
+    if (!landingExist) {
+        throw 'Landing do not exist';
+    }
+
+    const cloudinaryResponse = await cloudinary.uploader.upload(imageData, {
+        folder: CLOUDINARY_FOLDER
+    })
+    const urlImage = cloudinaryResponse.secure_url;
+
+    //* Eliminar imagen de cloudinary
+    const oldUrl = content.hero.img.src;
+    const nameArr = oldUrl.split("/");
+    const name = nameArr[nameArr.length - 1];
+    const [public_id] = name.split(".");
+    if (nameArr.includes(CLOUDINARY_FOLDER)) {
+        await cloudinary.uploader.destroy(`${CLOUDINARY_FOLDER}/${public_id}`);
+    }
+
+    if (section === 'hero') {
+        content.hero.img.src = urlImage;
+    }
+
+    const upadatedLanding = await prisma.landing.update({
+        where: { id: landingId, userId: user.id },
+        data: {
+            content: content as object
+        },
+    })
+
+    // revalidatePath('/edit-page/' + landingId)
+    return upadatedLanding;
+}
 

@@ -12,7 +12,7 @@ export default function EditPage({ params }: { params: { id: string } }) {
 
   const landingId = useLandingStore(state => state.id);
   const {
-sectionsLayout,
+    sectionsLayout,
 
     setLandingContent,
     setTitle,
@@ -22,9 +22,8 @@ sectionsLayout,
 
   const setHeroOption = useDesignStore(state => state.setHeroOption);
 
-
   useEffect(() => {
-    if (landingId === params.id) return
+    if (landingId === params.id) return;
 
     getLanding(params.id)
       .then(landing => {
@@ -39,11 +38,11 @@ sectionsLayout,
 
 
   useEffect(() => {
-    
+
     setHeroOption(sectionsLayout.hero.id)
 
   }, [sectionsLayout])
-  
+
 
   return (
     <>

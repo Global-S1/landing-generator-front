@@ -1,10 +1,10 @@
 import { useLandingStore } from "@/store";
 import { EditFeatureItem } from "./EditFeatureItem";
-import { DisplaySection } from "../DisplaySection";
+import { DisplaySection } from "../../DisplaySection";
 
 export const EditFeaturesSection = () => {
 
-    const {landing, addNewFeature} = useLandingStore(state => state);
+    const { landing, addNewFeature } = useLandingStore(state => state);
     const { features } = landing.features;
 
     const handleAddNewFeature = () => {
@@ -21,8 +21,8 @@ export const EditFeaturesSection = () => {
 
     return (
         <section className="flex flex-col p-2 gap-4">
-            <DisplaySection sectionId="features"/>
-            
+            <DisplaySection sectionId="features" />
+
             <div className="flex flex-col items-start gap-2">
                 {
                     features.map((feature, index) => (
