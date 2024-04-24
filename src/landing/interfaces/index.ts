@@ -1,3 +1,4 @@
+export * from './landing-response';
 
 export interface LandingContent {
     hero: HeroSectionProps;

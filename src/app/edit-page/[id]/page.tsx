@@ -1,48 +1,47 @@
 'use client';
 
 import { useEffect } from "react";
-import { useDesignStore, useLandingStore } from "@/store";
 import { SkeletonEditPage, TopBar } from "@/components";
-import { getLanding } from "@/landing/actions";
+import { getLandingContent } from "@/landing/actions";
 import { Landing, Sidebar } from "@/landing/components";
-import { LandingContent } from "@/landing/interfaces";
-import { SectionsLayout } from "@/interfaces";
+import { About, Cta, Faq, Features, Footer, Header, Hero, LandingContent } from "@/landing/interfaces";
+import { useLandingStore } from "@/store/landingStore";
 
 export default function EditPage({ params }: { params: { id: string } }) {
 
-  const landingId = useLandingStore(state => state.id);
-  const {
-    sectionsLayout,
+  // const landingId = useLandingStore(state => state.id);
+  const {landing, setState} = useLandingStore( state => state);
+  const {id: landingId} = landing;
 
-    setLandingContent,
-    setTitle,
-    setServerLanding,
-    setSectionsLayout
-  } = useLandingStore(state => state);
+  // const {
+  //   sectionsLayout,
 
-  const setHeroOption = useDesignStore(state => state.setHeroOption);
+  //   setLandingContent,
+  //   setTitle,
+  //   setServerLanding,
+  //   setSectionsLayout
+  // } = useLandingStore(state => state);
+
 
   useEffect(() => {
     if (landingId === params.id) return;
 
-    getLanding(params.id)
-      .then(landing => {
-        if (!landing) return;
-        setLandingContent(landing.id, landing.content as unknown as LandingContent);
-        setServerLanding(landing.content as unknown as LandingContent);
-        setTitle(landing.title);
-        setSectionsLayout(landing.sectionsLayout as unknown as SectionsLayout);
-        localStorage.setItem('sectionsLayout', JSON.stringify(sectionsLayout));
+    getLandingContent(params.id)
+      .then(resp => {
+        if (!resp) return;
+        const {header, hero, about, features, faq, cta, footer, landing} = resp;
+        setState({
+          landing,
+          header: header as Header,
+          hero: hero as unknown as Hero,
+          about: about as unknown as About,
+          features: features as unknown as Features,
+          faq: faq as unknown as Faq,
+          cta: cta as unknown as Cta,
+          footer: footer as Footer,
+        })
       })
   }, [])
-
-
-  useEffect(() => {
-
-    setHeroOption(sectionsLayout.hero.id)
-
-  }, [sectionsLayout])
-
 
   return (
     <>

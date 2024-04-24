@@ -1,191 +1,162 @@
+import { SectionType } from "@/interfaces";
+import { About, Cta, Faq, FaqItem, Feature, Features, Footer, Hero, Landing, LandingResponse } from "../landing/interfaces";
+import { Header } from "@/landing/interfaces";
 import { create } from "zustand";
-import { SectionType, SectionsLayout } from "@/interfaces";
-import { landingContent, sectionsLayoutExample } from "@/landing/data";
-import { AboutSectionProps, CtaSectionProps, FaqItem, Feature, HeroSectionProps, LandingContent } from "@/landing/interfaces";
 
-interface ChangeHeroContent extends Partial<HeroSectionProps> { }
-interface ChangeAboutContent extends Partial<AboutSectionProps> { }
-interface ChangeCtaContent extends Partial<CtaSectionProps> { }
-interface ChangeFeatureItemContent extends Partial<Feature> { }
-interface ChangeFaqItemContent {
-    question?: string;
-    answer?: string;
+
+interface SetInitState {
+    landing: Landing;
+    header: Header;
+    hero: Hero;
+    about: About;
+    features: Features;
+    faq: Faq;
+    cta: Cta;
+    footer: Footer;
 }
+
 interface LandingState {
-    id: string;
-    title: string;
-    landing: LandingContent;
-    serverLanding: LandingContent;
-    sectionsLayout: SectionsLayout;
+    landing: Landing;
+    header: Header;
+    hero: Hero;
+    about: About;
+    features: Features;
+    faq: Faq;
+    cta: Cta;
+    footer: Footer;
 
-    // initail methods
-    setTitle: (value: string) => void;
-    setServerLanding: (content: LandingContent) => void;
-    setLandingContent: (id: string, content: LandingContent) => void;
-    setSectionsLayout: (value: SectionsLayout) => void;
+    sectionsId: SectionType[];
+    setState: (value: SetInitState) => void;
+    setSections: (value: SectionType[]) => void;
 
-    resetLandingStore:() => void;
-
-    changeSectionLayout: (section: SectionType ,value: string) => void;
+    changeFeatureItemContent: (oldTitle: string, value: ChangeFeatureItemContent) => void;
 
     changeHeroContent: (value: ChangeHeroContent) => void;
     changeAboutContent: (value: ChangeAboutContent) => void;
     changeCtaContent: (value: ChangeCtaContent) => void;
 
-    // feature
-    changeFeatureItemContent: (oldTitle: string, value: ChangeFeatureItemContent) => void;
     addNewFeature: (value: Feature) => void;
-    deleteFeature: (value: string) => void;
+    deleteFeature: (title: string) => void;
 
-    // faq
     changeFaqItemContent: (oldQuestion: string, value: ChangeFaqItemContent) => void;
     addNewFaqItem: (value: FaqItem) => void;
     deleteFaqItem: (value: string) => void;
+
 }
 
+interface ChangeHeroContent extends Omit<Hero, "id" | "layout" | "landingId"> { }
+interface ChangeAboutContent extends Omit<About, "id" | "layout" | "landingId"> { }
+
+interface ChangeFeatureItemContent extends Partial<Feature> { }
+interface ChangeFeaturesContent extends Omit<Features, "id" | "layout" | "landingId"> { }
+interface ChangeFaqItemContent {
+    question?: string;
+    answer?: string;
+}
+interface ChangeFaqContent extends Omit<Faq, "id" | "layout" | "landingId"> { }
+interface ChangeCtaContent extends Omit<Cta, "id" | "layout" | "landingId"> { }
+
 export const useLandingStore = create<LandingState>((set) => ({
-    id: '',
-    landing: landingContent,
-    serverLanding: landingContent,
-    title: '',
-    sectionsLayout: sectionsLayoutExample,
+    landing: {} as Landing,
+    header: {} as Header,
+    hero: {} as Hero,
+    about: {} as About,
+    features: {} as Features,
+    faq: {} as Faq,
+    cta: {} as Cta,
+    footer: {} as Footer,
+    sectionsId: ['header', 'hero', 'about', 'features', 'faq', 'cta', 'footer'],
 
-    //* methods
-    setTitle: (value: string) => set({
-        title: value
+    setSections: (value: SectionType[]) => set({
+        sectionsId: [...value]
     }),
-    setServerLanding: (content: LandingContent) => set({
-        serverLanding: content
-    }),
-    setSectionsLayout: (value: SectionsLayout) => set({
-        sectionsLayout:{...value}
-    }),
-    resetLandingStore: () => set({
-        id: '',
-        landing: landingContent,
-        serverLanding: landingContent,
+    setState: (value: SetInitState) => set({
+        ...value
     }),
 
-    setLandingContent: (idValue: string, content: LandingContent) => set({
-        id: idValue,
-
-        landing: { ...content }
-    }),
-    
-    changeSectionLayout: (section: SectionType ,value: string) => set(({sectionsLayout}) => ({
-        sectionsLayout: {
-            ...sectionsLayout,
-            [section]: {
-                ...sectionsLayout[section], 
-                id: value
-            }
+    changeHeroContent: (value: ChangeHeroContent) => set(({ hero }) => ({
+        hero: {
+            ...value,
+            id: hero.id,
+            layout: hero.layout,
+            landingId: hero.landingId,
+        },
+    })),
+    changeAboutContent: (value: ChangeAboutContent) => set(({ about }) => ({
+        about: {
+            ...value,
+            id: about.id,
+            layout: about.layout,
+            landingId: about.landingId,
+        },
+    })),
+    changeCtaContent: (value: ChangeCtaContent) => set(({ cta }) => ({
+        cta: {
+            ...value,
+            id: cta.id,
+            layout: cta.layout,
+            landingId: cta.landingId,
         }
     })),
 
-    //* sections content
-    changeHeroContent: (value: ChangeHeroContent) => set(state => ({
-        landing: {
-            ...state.landing,
-            hero: {
-                ...state.landing.hero,
-                ...value
-            }
-        }
-    })),
-    changeAboutContent: (value: ChangeAboutContent) => set(({ landing }) => ({
-        landing: {
-            ...landing,
-            about: {
-                ...landing.about,
-                ...value
-            }
-        }
-    })),
-    changeCtaContent: (value: ChangeCtaContent) => set(({ landing }) => ({
-        landing: {
-            ...landing,
-            cta: {
-                ...landing.cta,
-                ...value
-            }
-        }
-    })),
 
-    //* Feature
-    changeFeatureItemContent: (oldTitle: string, value: ChangeFeatureItemContent) => set(({ landing }) => ({
-        landing: {
-            ...landing,
-            features: {
-                ...landing.features,
-                features: landing.features.features.map(f => {
-                    if (f.title.trim() === oldTitle.trim()) {
-                        const updatedFeature = {
-                            ...f,
-                            ...value
-                        }
-                        return updatedFeature
+    // Features
+    changeFeatureItemContent: (oldTitle: string, value: ChangeFeatureItemContent) => set(({ features }) => ({
+        features: {
+            ...features,
+            features: features.features.map(f => {
+                if (f.title.trim() === oldTitle.trim()) {
+                    const updatedFeature = {
+                        ...f,
+                        ...value
                     }
-                    return f
-                })
-            }
+                    return updatedFeature
+                }
+                return f
+            })
         }
     })),
-    addNewFeature: (value: Feature) => set(({ landing }) => ({
-        landing: {
-            ...landing,
-            features: {
-                ...landing.features,
-                features: [...landing.features.features, value]
-            }
+    addNewFeature: (value: Feature) => set(({ features }) => ({
+        features: {
+            ...features,
+            features: [...features.features, value]
         }
     })),
-    deleteFeature: (value: string) => set(({ landing }) => ({
-        landing: {
-            ...landing,
-            features: {
-                ...landing.features,
-                features: landing.features.features.filter(f => f.title.trim() !== value.trim())
-            }
+    deleteFeature: (title: string) => set(({ features }) => ({
+        features: {
+            ...features,
+            features: features.features.filter(f => f.title.trim() !== title.trim())
         }
     })),
 
 
-    //* Faq
-    changeFaqItemContent: (oldQuestion: string, value: ChangeFaqItemContent) => set(({ landing }) => ({
-        landing: {
-            ...landing,
-            faq: {
-                ...landing.faq,
-                faqData: landing.faq.faqData.map(f => {
-                    if (f.question.trim() === oldQuestion.trim()) {
-                        const updatedFaqItem = {
-                            ...f,
-                            ...value
-                        }
-                        return updatedFaqItem
+    // Faq
+    changeFaqItemContent: (oldQuestion: string, value: ChangeFaqItemContent) => set(({ faq }) => ({
+        faq: {
+            ...faq,
+            faqData: faq.faqData.map(f => {
+                if (f.question.trim() === oldQuestion.trim()) {
+                    const updatedFaqItem = {
+                        ...f,
+                        ...value
                     }
-                    return f
-                })
-            }
+                    return updatedFaqItem
+                }
+                return f
+            })
         }
     })),
-    addNewFaqItem: (value: FaqItem) => set(({ landing }) => ({
-        landing: {
-            ...landing,
-            faq: {
-                ...landing.faq,
-                faqData: [...landing.faq.faqData, value]
-            }
+    addNewFaqItem: (value: FaqItem) => set(({ faq }) => ({
+        faq: {
+            ...faq,
+            faqData: [...faq.faqData, value]
         }
     })),
-    deleteFaqItem: (value: string) => set(({ landing }) => ({
-        landing: {
-            ...landing,
-            faq: {
-                ...landing.faq,
-                faqData: landing.faq.faqData.filter(f => f.question.trim() !== value.trim())
-            }
+    deleteFaqItem: (question: string) => set(({ faq }) => ({
+        faq: {
+            ...faq,
+            faqData: faq.faqData.filter(f => f.question.trim() !== question.trim())
         }
-    }))
+    })),
+
 }))
-

@@ -12,7 +12,9 @@ interface Props {
 }
 
 export const EditFeatureItem = ({ title, feature }: Props) => {
-    const deleteFeature = useLandingStore(state => state.deleteFeature);
+    const {
+        deleteFeature
+    } = useLandingStore(state => state);
     const [show, setShow] = useState(false);
 
     const background = 'bg-gray-300';

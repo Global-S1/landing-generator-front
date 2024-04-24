@@ -1,7 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useDesignStore, useLandingStore } from '@/store'
-import { upadateSectionImg, updateSectionsLayout } from '@/landing/actions';
-import { LandingContent } from '@/landing/interfaces';
 import { useForm } from '@/hooks';
 import { SectionsLayout } from '@/interfaces';
 import { EditImage } from '../EditImage';
@@ -9,15 +7,11 @@ import { EditImage } from '../EditImage';
 export const EditHeroSection = () => {
 
     const {
-        id: landingId,
-        landing,
-        sectionsLayout,
+        hero,
 
-        setSectionsLayout,
-        changeSectionLayout,
         changeHeroContent
     } = useLandingStore(state => state);
-    const { title, description, img, button } = landing.hero;
+    const {title, description, img, button } = hero;
 
     const heroOption = useDesignStore(state => state.heroOption);
 
@@ -38,7 +32,7 @@ export const EditHeroSection = () => {
     const onOptionChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
 
         const option = event.target.value;
-        changeSectionLayout('hero', option);
+        // changeSectionLayout('hero', option);
 
         setSendDB(true);
     };
@@ -54,7 +48,7 @@ export const EditHeroSection = () => {
             img: {
                 src: img.src,
                 alt: formState.imgAlt
-            }
+            },
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formState])
@@ -62,12 +56,12 @@ export const EditHeroSection = () => {
 
     useEffect(() => {
         if (sendDB) {
-            updateSectionsLayout(landingId, sectionsLayout)
-                .then(updatedLanding => {
-                    setSectionsLayout(updatedLanding.sectionsLayout as unknown as SectionsLayout);
+            // updateSectionsLayout(landingId, sectionsLayout)
+            //     .then(updatedLanding => {
+            //         setSectionsLayout(updatedLanding.sectionsLayout as unknown as SectionsLayout);
 
-                    setSendDB(false);
-                })
+            //         setSendDB(false);
+            //     })
         }
     }, [sendDB])
 
@@ -97,33 +91,33 @@ export const EditHeroSection = () => {
                 cols={30}
                 rows={4}
                 spellCheck={false}
-                placeholder="Hero title"
+                placeholder="Description"
                 value={formState.description}
                 name="description"
                 onChange={onTextAreaChange} />
             <input
                 className="input"
                 type="text"
-                placeholder="Hero title"
+                placeholder="Button text"
                 value={formState.buttonText}
                 name="buttonText"
                 onChange={onInputChange} />
             <input
                 className="input"
                 type="text"
-                placeholder="Hero title"
+                placeholder="Button link"
                 value={formState.buttonLink}
                 name="buttonLink"
                 onChange={onInputChange} />
             <input
                 className="input"
                 type="text"
-                placeholder="Hero title"
+                placeholder="Image alt"
                 value={formState.imgAlt}
                 name="imgAlt"
                 onChange={onInputChange} />
 
-            <EditImage imgSrc={img.src} imgAlt={img.alt} />
+            <EditImage idSection={hero.id} imgSrc={img.src} imgAlt={img.alt} />
 
         </section>
     )

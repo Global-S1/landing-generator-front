@@ -60,9 +60,9 @@ model Sections {
 
   header   Header?   @relation(fields: [headerId], references: [id])
   hero     Hero?     @relation(fields: [heroId], references: [id])
-  hbout    About?    @relation(fields: [aboutId], references: [id])
-  heatures Features? @relation(fields: [featuresId], references: [id])
-  haq      Faq?      @relation(fields: [faqId], references: [id])
+  about    About?    @relation(fields: [aboutId], references: [id])
+  features Features? @relation(fields: [featuresId], references: [id])
+  faq      Faq?      @relation(fields: [faqId], references: [id])
   cta      Cta?      @relation(fields: [ctaId], references: [id])
   footer   Footer?   @relation(fields: [footerId], references: [id])
   landing  Landing   @relation(fields: [landingId], references: [id], onDelete: Cascade)
@@ -117,7 +117,7 @@ model Features {
 model Faq {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   title     String
-  faq       Json[]
+  faqData       Json[]
   layout    Json
   landingId String @db.ObjectId
 
@@ -129,6 +129,7 @@ model Cta {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
+  button Json
   layout      Json
   landingId   String @db.ObjectId
 

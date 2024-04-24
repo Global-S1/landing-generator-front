@@ -1,26 +1,23 @@
 import Image from "next/image";
-import { upadateSectionImg } from "@/landing/actions";
-import { LandingContent } from "@/landing/interfaces";
 import { useLandingStore } from "@/store";
 import { ChangeEvent, useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { CreateImageWithAi } from "./CreateImageWithAi";
+import { updateSectionImg } from "@/landing/actions";
+import { Button, Img } from "@/landing/interfaces";
 
 interface Props {
+  idSection: string;
   imgSrc: string;
   imgAlt: string;
 }
 
-export const EditImage = ({ imgSrc, imgAlt }: Props) => {
+export const EditImage = ({idSection, imgSrc, imgAlt }: Props) => {
 
-  const {
-    id: landingId,
-    landing,
+  const {landing, changeHeroContent} = useLandingStore();
 
-    setServerLanding,
-    setLandingContent,
-  } = useLandingStore(state => state);
-
+  const state = useLandingStore();
+  
   const [fileImg, setFileImg] = useState<File | null>(null)
   const [imgErrMsg, setImgErrMsg] = useState('')
 
@@ -62,11 +59,16 @@ export const EditImage = ({ imgSrc, imgAlt }: Props) => {
 
     const formData = new FormData()
     formData.append('file', fileImg)
-    await upadateSectionImg(landingId, 'hero', landing, formData)
+    await updateSectionImg(landing.id,idSection ,'hero', formData)
       .then(updatedLanding => {
 
-        setLandingContent(landingId, updatedLanding.content as unknown as LandingContent);
-        setServerLanding(updatedLanding.content as unknown as LandingContent);
+        if(!updatedLanding) return;
+        changeHeroContent({
+          img: updatedLanding.img as unknown as Img,
+          title:updatedLanding.title,
+          description: updatedLanding.description,
+          button: updatedLanding.button as unknown as Button
+        })
       })
   }
 

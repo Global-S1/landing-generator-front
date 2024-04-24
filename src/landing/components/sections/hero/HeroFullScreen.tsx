@@ -1,6 +1,6 @@
-import { HeroSectionProps } from "@/landing/interfaces"
+import { Hero, HeroSectionProps } from "@/landing/interfaces"
 
-export const HeroFullScreen = ({ title, description, img, button }: HeroSectionProps) => {
+export const HeroFullScreen = ({ title, description, img, button }: Hero) => {
   return (
     <section id="hero" className="flex flex-wrap">
     <div className="w-full sm:w-8/12 mb-10">

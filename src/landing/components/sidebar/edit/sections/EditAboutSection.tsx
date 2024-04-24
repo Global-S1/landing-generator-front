@@ -3,15 +3,16 @@ import { useLandingStore } from "@/store";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
 import { DisplaySection } from "../DisplaySection";
+import { EditImage } from "../EditImage";
 
 export const EditAboutSection = () => {
 
     const {
-        landing,
-        sectionsLayout,
+        about,
+       
         changeAboutContent
     } = useLandingStore(state => state);
-    const { title, description, img } = landing.about;
+    const { title, description, img } = about;
 
     const { formState, onInputChange, onTextAreaChange } = useForm({
         title,
@@ -20,22 +21,6 @@ export const EditAboutSection = () => {
         imgAlt: img.alt,
     })
 
-    const [image, setImage] = useState('')
-
-    const handleChageInputFile = (event: ChangeEvent<HTMLInputElement>) => {
-        const files = (event.target as HTMLInputElement).files
-        if (files) {
-            const imgUrl = URL.createObjectURL(files[0])
-
-            setImage(imgUrl)
-            changeAboutContent({
-                img: {
-                    src: imgUrl,
-                    alt: formState.imgAlt
-                }
-            })
-        }
-    }
     useEffect(() => {
         changeAboutContent({
             title: formState.title,
@@ -50,7 +35,7 @@ export const EditAboutSection = () => {
     return (
         <section className="flex flex-col p-2 gap-4">
 
-            <DisplaySection sectionId="about" />
+            <DisplaySection sectionId="about" status={about.layout.status}/>
 
             <input
                 className="input"
@@ -68,22 +53,7 @@ export const EditAboutSection = () => {
                 value={formState.description}
                 name="description"
                 onChange={onTextAreaChange} />
-            <input
-                className="input"
-                type="text"
-                placeholder="Img alt"
-                value={formState.imgAlt}
-                name="imgAlt"
-                onChange={onInputChange} />
-            <input
-                className="block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 focus:outline-none rounded-s"
-                id="file_input"
-                type="file"
-                onChange={handleChageInputFile}
-            />
-            <div className="mt-4">
-                <Image src={img.src} width={100} height={100} alt='image hero' />
-            </div>
+            <EditImage idSection={about.id} imgSrc={img.src} imgAlt={img.alt}/> 
         </section>
     )
 }

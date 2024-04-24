@@ -1,4 +1,4 @@
-import { Feature, FeaturesSectionProps } from "../../interfaces";
+import { Feature, Features, FeaturesSectionProps } from "../../interfaces";
 
 const FeatureItem = ({ img, title, description }: Feature) => {
 
@@ -11,7 +11,7 @@ const FeatureItem = ({ img, title, description }: Feature) => {
   );
 };
 
-export const FeaturesSection = ({ title, features }: FeaturesSectionProps) => {
+export const FeaturesSection = ({ title, features }: Features) => {
 
   return (
     <section id="features" className="py-[200px]">

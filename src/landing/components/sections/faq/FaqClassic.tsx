@@ -1,6 +1,6 @@
-import { FaqSectionProps } from "@/landing/interfaces"
+import { Faq, FaqSectionProps } from "@/landing/interfaces"
 
-export const FaqClassic = ({ title, faqData }: FaqSectionProps) => {
+export const FaqClassic = ({ title, faqData }: Faq) => {
     return (
         <section id="faq" className="py-[50px] max-w-7xl mx-auto">
             <div className="text-center mb-16">

@@ -3,13 +3,13 @@
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createLandingContent } from "@/landing/actions/createLandingContent";
-import { useLandingStore } from "@/store";
-import { LandingContent } from "@/landing/interfaces";
+import { About, Cta, Faq, Features, Footer, Header, Hero } from "@/landing/interfaces";
+import { useLandingStore } from "@/store/landingStore";
 
 export const DescriptionLandingForm = () => {
 
   const router = useRouter();
-  const setLandingContent = useLandingStore(state => state.setLandingContent);
+  const {setState} = useLandingStore(state => state);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -19,10 +19,20 @@ export const DescriptionLandingForm = () => {
 
     if (title.trim().length > 2 && desc) {
       const prompt = `Mi pagina se llama ${title}, ${desc}`;
-      const landing = await createLandingContent(title, prompt)
+      const resp = await createLandingContent(title, prompt)
 
-      if (landing) {
-        setLandingContent(landing.id, landing.content as unknown as LandingContent);
+      if (resp) {
+        const {header, hero, about, features, faq, cta, footer, landing} = resp;
+        setState({
+          landing,
+          header: header as Header,
+          hero: hero as unknown as Hero,
+          about: about as unknown as About,
+          features: features as unknown as Features,
+          faq: faq as unknown as Faq,
+          cta: cta as unknown as Cta,
+          footer: footer as Footer,
+        })
 
         router.push('/edit-page');
       }

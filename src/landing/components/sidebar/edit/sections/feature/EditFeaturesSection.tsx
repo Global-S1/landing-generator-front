@@ -4,8 +4,12 @@ import { DisplaySection } from "../../DisplaySection";
 
 export const EditFeaturesSection = () => {
 
-    const { landing, addNewFeature } = useLandingStore(state => state);
-    const { features } = landing.features;
+    const {
+        features: featuresInfo,
+        
+        addNewFeature
+    } = useLandingStore(state => state);
+    const { features, layout } = featuresInfo;
 
     const handleAddNewFeature = () => {
         const newFeature = {
@@ -21,7 +25,7 @@ export const EditFeaturesSection = () => {
 
     return (
         <section className="flex flex-col p-2 gap-4">
-            <DisplaySection sectionId="features" />
+            <DisplaySection sectionId="features" status={layout.status} />
 
             <div className="flex flex-col items-start gap-2">
                 {

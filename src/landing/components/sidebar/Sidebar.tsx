@@ -1,11 +1,10 @@
 'use client';
-import { useLandingStore } from "@/store";
+
 import { SectionItem } from "./SectionItem";
-import { SectionType } from "@/interfaces";
+import { useLandingStore } from "@/store/landingStore";
 
 export const Sidebar = () => {
-    const landing = useLandingStore(state => state.landing)
-    const sections = Object.keys(landing) as SectionType[]
+    const {sectionsId: sections} = useLandingStore(state => state);
 
     return (
         <aside className={`w-[400px] mt-[50px] h-[95vh] border-e-[1px] border-gray-600 bg-gray-50 p-2 overflow-y-scroll fixed`}>

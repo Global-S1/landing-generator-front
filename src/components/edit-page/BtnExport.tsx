@@ -1,12 +1,10 @@
 'use client';
 
-import { SectionType } from "@/interfaces";
 import { createTemplateToExport } from "@/landing/actions/createTemplateToExport";
-import { useLandingStore } from "@/store";
+import { useLandingStore } from "@/store/landingStore";
 
 export const BtnExport = () => {
-    const landing = useLandingStore(state => state.landing);
-    const sections = Object.keys(landing) as SectionType[];
+    const {sectionsId: sections} = useLandingStore(state => state);
 
     const exportLanding = async () => {
 

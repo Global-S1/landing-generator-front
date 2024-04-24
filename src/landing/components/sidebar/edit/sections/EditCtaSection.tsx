@@ -4,9 +4,11 @@ import { DisplaySection } from "../DisplaySection";
 import { useForm } from "@/hooks";
 
 export const EditCtaSection = () => {
-    const landing = useLandingStore(state => state.landing);
-    const changeCtaContent = useLandingStore(state => state.changeCtaContent);
-    const { title, description, button } = landing.cta;
+    const {
+        cta,
+        changeCtaContent
+    } = useLandingStore(state => state);
+    const { title, description, button, layout } = cta;
 
     const { formState, onInputChange, onTextAreaChange } = useForm({
         title,
@@ -30,7 +32,7 @@ export const EditCtaSection = () => {
 
     return (
         <section className="flex flex-col p-2 gap-4">
-            <DisplaySection sectionId="cta" />
+            <DisplaySection sectionId="cta" status={layout.status}/>
 
             <input
                 className="input"

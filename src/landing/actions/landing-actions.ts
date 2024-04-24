@@ -66,7 +66,7 @@ export const createLanding = async (data: CreateLandingDto) => {
         prisma.faq.create({
             data: {
                 title: content.faq.title,
-                faq: content.faq.faqData as object[],
+                faqData: content.faq.faqData as object[],
                 layout,
 
                 landingId: landing.id
@@ -102,9 +102,9 @@ export const createLanding = async (data: CreateLandingDto) => {
         include: {
             header: true,
             hero: true,
-            hbout: true,
-            heatures: true,
-            haq: true,
+            about: true,
+            features: true,
+            faq: true,
             cta: true,
             footer: true,
             landing: true
@@ -114,47 +114,47 @@ export const createLanding = async (data: CreateLandingDto) => {
     return sections;
 }
 
-export const updateLandingContent = async (landingId: string, content: LandingContent) => {
-    const user = await getUserServerSession();
-    if (!user) {
-        redirect('/api/auth/signin')
-    }
+// export const updateLandingContent = async (landingId: string, content: LandingContent) => {
+//     const user = await getUserServerSession();
+//     if (!user) {
+//         redirect('/api/auth/signin')
+//     }
 
-    const landingExist = await prisma.landing.findUnique({ where: { id: landingId, userId: user.id } });
-    if (!landingExist) {
-        throw 'Landing do not exist';
-    }
+//     const landingExist = await prisma.landing.findUnique({ where: { id: landingId, userId: user.id } });
+//     if (!landingExist) {
+//         throw 'Landing do not exist';
+//     }
 
-    const upadatedLanding = await prisma.landing.update({
-        where: { id: landingId, userId: user.id },
-        data: {
-            content: content as object
-        },
-    })
+//     const upadatedLanding = await prisma.landing.update({
+//         where: { id: landingId, userId: user.id },
+//         data: {
+//             content: content as object
+//         },
+//     })
 
-    return upadatedLanding;
-}
+//     return upadatedLanding;
+// }
 
-export const updateSectionsLayout = async (landingId: string, sectionsLayout: SectionsLayout) => {
-    const user = await getUserServerSession();
-    if (!user) {
-        redirect('/api/auth/signin')
-    }
+// export const updateSectionsLayout = async (landingId: string, sectionsLayout: SectionsLayout) => {
+//     const user = await getUserServerSession();
+//     if (!user) {
+//         redirect('/api/auth/signin')
+//     }
 
-    const landingExist = await prisma.landing.findUnique({ where: { id: landingId, userId: user.id } });
-    if (!landingExist) {
-        throw 'Landing do not exist';
-    }
+//     const landingExist = await prisma.landing.findUnique({ where: { id: landingId, userId: user.id } });
+//     if (!landingExist) {
+//         throw 'Landing do not exist';
+//     }
 
-    const upadatedLanding = await prisma.landing.update({
-        where: { id: landingId, userId: user.id },
-        data: {
-            sectionsLayout: sectionsLayout as object
-        }
-    })
+//     const upadatedLanding = await prisma.landing.update({
+//         where: { id: landingId, userId: user.id },
+//         data: {
+//             sectionsLayout: sectionsLayout as object
+//         }
+//     })
 
-    return upadatedLanding;
-}
+//     return upadatedLanding;
+// }
 
 
 export const getLandings = async () => {
@@ -167,19 +167,99 @@ export const getLandings = async () => {
     return landingList;
 }
 
-export const getLanding = async (id: string) => {
+export const getLandingContent = async (id: string) => {
     const user = await getUserServerSession();
     if (!user) {
         redirect('/api/auth/signin')
     }
-    const landing = await prisma.landing.findUnique({ where: { userId: user.id, id, } });
+    const landing = await prisma.sections.findFirst({
+        where: { landingId: id },
+        include: {
+            header: true,
+            hero: true,
+            about: true,
+            features: true,
+            faq: true,
+            cta: true,
+            footer: true,
+            landing: true
+        }
+    });
 
     return landing;
 }
 
 
+// export const updateSectionImg = async (landingId: string, sectionId: string,sectionType: SectionType, formData: FormData) => {
+//     const user = await getUserServerSession();
+//     if (!user) {
+//         redirect('/api/auth/signin');
+//     };
 
-export const upadateSectionImg = async (landingId: string, section: SectionType, content: LandingContent, formData: FormData) => {
+//     const landingExist = await prisma.landing.findUnique({ where: { id: landingId, userId: user.id } });
+
+//     switch (sectionType) {
+//         case 'hero':
+
+//             const section = prisma.hero.findUnique({where:{id: sectionId}});
+//             const updateSection = prisma.hero.update({where:{id: sectionId,}, data:{
+//                 img:{src: 'https://placehold.co/600x400'}
+//             }})
+
+//             break;
+
+//         default:
+//             break;
+//     }
+
+//     if (!landingExist) {
+//         throw 'Landing do not exist';
+//     }
+
+//     const file = formData.get('file') as File;
+
+//     const bytes = await file.arrayBuffer();
+//     const buffer = Buffer.from(bytes);
+
+//     //* Subir imagen a cloudinary
+//     const cloudinaryResponse: UploadApiResponse | undefined = await new Promise((resolve, reject) => {
+//         cloudinary.uploader
+//             .upload_stream(
+//                 { folder: CLOUDINARY_FOLDER }, (err, result) => {
+//                     if (err) {
+//                         console.log(err);
+//                         reject(err);
+//                     }
+//                     resolve(result);
+
+//                 }).end(buffer)
+//     })
+//     const urlImage = cloudinaryResponse!.secure_url;
+
+//     //* Eliminar imagen de cloudinary
+//     const oldUrl = content.hero.img.src;
+//     const nameArr = oldUrl.split("/");
+//     const name = nameArr[nameArr.length - 1];
+//     const [public_id] = name.split(".");
+//     if (nameArr.includes(CLOUDINARY_FOLDER)) {
+//         await cloudinary.uploader.destroy(`${CLOUDINARY_FOLDER}/${public_id}`);
+//     }
+
+//     if (section === 'hero') {
+//         content.hero.img.src = urlImage;
+//     }
+
+//     const upadatedLanding = await prisma.landing.update({
+//         where: { id: landingId, userId: user.id },
+//         data: {
+//             content: content as object
+//         },
+//     })
+
+//     // revalidatePath('/edit-page/' + landingId)
+//     return upadatedLanding;
+// }
+export const updateSectionImg = async (landingId: string, sectionId: string, sectionType: SectionType, formData: FormData) => {
     const user = await getUserServerSession();
     if (!user) {
         redirect('/api/auth/signin');
@@ -187,91 +267,53 @@ export const upadateSectionImg = async (landingId: string, section: SectionType,
 
     const landingExist = await prisma.landing.findUnique({ where: { id: landingId, userId: user.id } });
 
-    if (!landingExist) {
-        throw 'Landing do not exist';
-    }
 
-    const file = formData.get('file') as File;
-
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    //* Subir imagen a cloudinary
-    const cloudinaryResponse: UploadApiResponse | undefined = await new Promise((resolve, reject) => {
-        cloudinary.uploader
-            .upload_stream(
-                { folder: CLOUDINARY_FOLDER }, (err, result) => {
-                    if (err) {
-                        console.log(err);
-                        reject(err);
-                    }
-                    resolve(result);
-
-                }).end(buffer)
-    })
-    const urlImage = cloudinaryResponse!.secure_url;
-
-    //* Eliminar imagen de cloudinary
-    const oldUrl = content.hero.img.src;
-    const nameArr = oldUrl.split("/");
-    const name = nameArr[nameArr.length - 1];
-    const [public_id] = name.split(".");
-    if (nameArr.includes(CLOUDINARY_FOLDER)) {
-        await cloudinary.uploader.destroy(`${CLOUDINARY_FOLDER}/${public_id}`);
-    }
-
-    if (section === 'hero') {
-        content.hero.img.src = urlImage;
-    }
-
-    const upadatedLanding = await prisma.landing.update({
-        where: { id: landingId, userId: user.id },
-        data: {
-            content: content as object
-        },
+    const updateSection = prisma.hero.update({
+        where: { id: sectionId, }, data: {
+            img: { src: 'https://placehold.co/600x400' }
+        }
     })
 
-    // revalidatePath('/edit-page/' + landingId)
-    return upadatedLanding;
+    return updateSection;
 }
-export const saveImageAi = async (landingId: string, section: SectionType, content: LandingContent, imageData: string) => {
-    const user = await getUserServerSession();
-    if (!user) {
-        redirect('/api/auth/signin');
-    };
+// export const saveImageAi = async (landingId: string, section: SectionType, content: LandingContent, imageData: string) => {
+//     const user = await getUserServerSession();
+//     if (!user) {
+//         redirect('/api/auth/signin');
+//     };
 
-    const landingExist = await prisma.landing.findUnique({ where: { id: landingId, userId: user.id } });
+//     const landingExist = await prisma.landing.findUnique({ where: { id: landingId, userId: user.id } });
 
-    if (!landingExist) {
-        throw 'Landing do not exist';
-    }
+//     if (!landingExist) {
+//         throw 'Landing do not exist';
+//     }
 
-    const cloudinaryResponse = await cloudinary.uploader.upload(imageData, {
-        folder: CLOUDINARY_FOLDER
-    })
-    const urlImage = cloudinaryResponse.secure_url;
+//     const cloudinaryResponse = await cloudinary.uploader.upload(imageData, {
+//         folder: CLOUDINARY_FOLDER
+//     })
+//     const urlImage = cloudinaryResponse.secure_url;
 
-    //* Eliminar imagen de cloudinary
-    const oldUrl = content.hero.img.src;
-    const nameArr = oldUrl.split("/");
-    const name = nameArr[nameArr.length - 1];
-    const [public_id] = name.split(".");
-    if (nameArr.includes(CLOUDINARY_FOLDER)) {
-        await cloudinary.uploader.destroy(`${CLOUDINARY_FOLDER}/${public_id}`);
-    }
+//     //* Eliminar imagen de cloudinary
+//     const oldUrl = content.hero.img.src;
+//     const nameArr = oldUrl.split("/");
+//     const name = nameArr[nameArr.length - 1];
+//     const [public_id] = name.split(".");
+//     if (nameArr.includes(CLOUDINARY_FOLDER)) {
+//         await cloudinary.uploader.destroy(`${CLOUDINARY_FOLDER}/${public_id}`);
+//     }
 
-    if (section === 'hero') {
-        content.hero.img.src = urlImage;
-    }
+//     if (section === 'hero') {
+//         content.hero.img.src = urlImage;
+//     }
 
-    const upadatedLanding = await prisma.landing.update({
-        where: { id: landingId, userId: user.id },
-        data: {
-            content: content as object
-        },
-    })
+//     const upadatedLanding = await prisma.landing.update({
+//         where: { id: landingId, userId: user.id },
+//         data: {
+//             content: content as object
+//         },
+//     })
 
-    // revalidatePath('/edit-page/' + landingId)
-    return upadatedLanding;
-}
+//     // revalidatePath('/edit-page/' + landingId)
+//     return upadatedLanding;
+// }
 
