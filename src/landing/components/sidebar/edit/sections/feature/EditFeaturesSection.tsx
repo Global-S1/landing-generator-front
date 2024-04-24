@@ -5,7 +5,7 @@ import { DisplaySection } from "../../DisplaySection";
 export const EditFeaturesSection = () => {
 
     const {
-        features: featuresInfo,
+        sections:{features: featuresInfo},
         
         addNewFeature
     } = useLandingStore(state => state);

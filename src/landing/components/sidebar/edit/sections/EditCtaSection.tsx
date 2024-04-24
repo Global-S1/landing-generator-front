@@ -5,7 +5,7 @@ import { useForm } from "@/hooks";
 
 export const EditCtaSection = () => {
     const {
-        cta,
+        sections:{cta},
         changeCtaContent
     } = useLandingStore(state => state);
     const { title, description, button, layout } = cta;

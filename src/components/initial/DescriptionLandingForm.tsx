@@ -25,13 +25,15 @@ export const DescriptionLandingForm = () => {
         const {header, hero, about, features, faq, cta, footer, landing} = resp;
         setState({
           landing,
-          header: header as Header,
-          hero: hero as unknown as Hero,
-          about: about as unknown as About,
-          features: features as unknown as Features,
-          faq: faq as unknown as Faq,
-          cta: cta as unknown as Cta,
-          footer: footer as Footer,
+          sections:{
+            header: header as Header,
+            hero: hero as unknown as Hero,
+            about: about as unknown as About,
+            features: features as unknown as Features,
+            faq: faq as unknown as Faq,
+            cta: cta as unknown as Cta,
+            footer: footer as Footer,
+          }
         })
 
         router.push('/edit-page');

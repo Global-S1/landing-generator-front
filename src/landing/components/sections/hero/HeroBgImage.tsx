@@ -1,6 +1,6 @@
 import { HeroSectionProps } from "../../../interfaces"
 
-export const HeroSection = ({ title, description, img, button }: HeroSectionProps) => {
+export const HeroBgImage = ({ title, description, img, button }: HeroSectionProps) => {
     return (
         <section id="hero" className="relative">
             <div className="absolute inset-0 bg-black opacity-50"></div>

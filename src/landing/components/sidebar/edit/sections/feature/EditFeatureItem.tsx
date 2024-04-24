@@ -1,10 +1,13 @@
 import { useForm } from "@/hooks";
-import { Feature } from "@/landing/interfaces"
+import { updateAboutImg, updateFeatureItemImg } from "@/landing/actions";
+import { Feature, Img } from "@/landing/interfaces"
 import { useLandingStore } from "@/store";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react"
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { MdDeleteOutline } from "react-icons/md";
+import { CreateImageWithAi } from "../../CreateImageWithAi";
+import { FaCloudUploadAlt } from "react-icons/fa";
 
 interface Props {
     title: string;
@@ -51,32 +54,80 @@ export const EditFeatureItem = ({ title, feature }: Props) => {
 
 export const EditFeatureContent = (feature: Feature) => {
 
-    const changeFeatureContent = useLandingStore(state => state.changeFeatureItemContent);
+    const {
+        sections:{features},
+        changeFeaturesContent,
+        changeFeatureItemContent
+    } = useLandingStore(state => state);
     
     const {formState, onInputChange, onTextAreaChange} = useForm({
         title: feature.title,
         description: feature.description
     })
 
-    const [image, setImage] = useState('')
+    const [fileImg, setFileImg] = useState<File | null>(null)
+    const [imgErrMsg, setImgErrMsg] = useState('')
+
 
     const handleChageInputFile = (event: ChangeEvent<HTMLInputElement>) => {
         const files = (event.target as HTMLInputElement).files
-        if (files) {
-            const imgUrl = URL.createObjectURL(files[0])
-            setImage(imgUrl)
-            changeFeatureContent(feature.title, {
-                img: {
-                    alt: feature.img.alt,
-                    src: imgUrl
-                }
-            })
+    
+        if (files && files.length > 0) {
+          const file = files[0];
+          if (!file.type.includes('image')) {
+            setImgErrMsg('Ingresa una imagen')
+    
+            setTimeout(() => {
+              setImgErrMsg('')
+            }, 3000);
+            return;
+          }
+          if (file instanceof Blob) {
+    
+            setFileImg(file)
+          } else {
+            // Manejar caso donde `files[0]` no es un objeto Blob
+            console.error('El archivo seleccionado no es válido.');
+          }
+        } else {
+          // Manejar caso donde no se selecciona ningún archivo
+          console.warn('Ningún archivo seleccionado.');
         }
-    }
+      }
+
+      async function uploadImage() {
+        if (!fileImg || !fileImg.type.includes('image')) {
+          setImgErrMsg('Selecciona una imagen')
+    
+          setTimeout(() => {
+            setImgErrMsg('')
+          }, 3000);
+          return;
+        };
+    
+        const formData = new FormData()
+        formData.append('file', fileImg)
+
+        await updateFeatureItemImg(feature.title,{
+          sectionId: features.id,
+          content: features,
+          formData
+        })
+          .then(updatedLanding => {
+    
+            if(!updatedLanding) return;
+            
+            changeFeaturesContent({
+                title: updatedLanding.title,
+                features: updatedLanding.features as unknown as Feature[]
+            })
+               
+          })
+      }
 
     useEffect(() => {
 
-        changeFeatureContent(
+        changeFeatureItemContent(
             feature.title,
             {
                 title: formState.title,
@@ -111,19 +162,34 @@ export const EditFeatureContent = (feature: Feature) => {
                     onChange={onTextAreaChange} />
             </div>
             <div>
+            <div className="flex flex-row items-center gap-2 mb-2">
                 <input
-                    className="block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 focus:outline-none rounded-s"
+                    className="input"
                     id="file_input"
                     type="file"
                     onChange={handleChageInputFile}
                 />
-                <div className="mt-4">
-                    <Image
-                        src={feature.img.src}
-                        width={100} height={100}
-                        alt='image hero'
-                    />
+                <button
+                    className="editElement__button"
+                    onClick={uploadImage}
+                    aria-label="Upload image"
+                >
+                    <FaCloudUploadAlt />
+                </button>
+            </div>
+
+            <CreateImageWithAi defaultPrompt={feature.img.alt} />
+
+            {
+                imgErrMsg
+                &&
+                <div className="p-4 text-sm text-red-800 rounded-lg bg-red-100" role="alert">
+                    <span className="font-medium">{imgErrMsg}</span>
                 </div>
+            }
+            <div className="mt-4">
+                <Image src={feature.img.src} width={100} height={100} alt='image hero' />
+            </div>
 
             </div>
         </div>

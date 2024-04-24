@@ -1,17 +1,20 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useDesignStore, useLandingStore } from '@/store'
 import { useForm } from '@/hooks';
-import { SectionsLayout } from '@/interfaces';
-import { EditImage } from '../EditImage';
+import { FaCloudUploadAlt } from 'react-icons/fa';
+import { CreateImageWithAi } from '../CreateImageWithAi';
+import { updateHeroImg } from '@/landing/actions';
+import { Button, Img } from '@/landing/interfaces';
+import Image from 'next/image';
 
 export const EditHeroSection = () => {
 
     const {
-        hero,
+        sections: { hero },
 
         changeHeroContent
     } = useLandingStore(state => state);
-    const {title, description, img, button } = hero;
+    const { title, description, img, button } = hero;
 
     const heroOption = useDesignStore(state => state.heroOption);
 
@@ -32,7 +35,11 @@ export const EditHeroSection = () => {
     const onOptionChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
 
         const option = event.target.value;
-        // changeSectionLayout('hero', option);
+
+        console.log(option)
+        changeHeroContent({
+        layout:{id: option, status: true}
+        })
 
         setSendDB(true);
     };
@@ -54,16 +61,80 @@ export const EditHeroSection = () => {
     }, [formState])
 
 
-    useEffect(() => {
-        if (sendDB) {
-            // updateSectionsLayout(landingId, sectionsLayout)
-            //     .then(updatedLanding => {
-            //         setSectionsLayout(updatedLanding.sectionsLayout as unknown as SectionsLayout);
 
-            //         setSendDB(false);
-            //     })
+    const [fileImg, setFileImg] = useState<File | null>(null)
+    const [imgErrMsg, setImgErrMsg] = useState('')
+  
+    const handleChageInputFile = (event: ChangeEvent<HTMLInputElement>) => {
+      const files = (event.target as HTMLInputElement).files
+  
+      if (files && files.length > 0) {
+        const file = files[0];
+        if (!file.type.includes('image')) {
+          setImgErrMsg('Ingresa una imagen')
+  
+          setTimeout(() => {
+            setImgErrMsg('')
+          }, 3000);
+          return;
         }
-    }, [sendDB])
+        if (file instanceof Blob) {
+  
+          setFileImg(file)
+        } else {
+          // Manejar caso donde `files[0]` no es un objeto Blob
+          console.error('El archivo seleccionado no es válido.');
+        }
+      } else {
+        // Manejar caso donde no se selecciona ningún archivo
+        console.warn('Ningún archivo seleccionado.');
+      }
+    }
+  
+    async function uploadImage() {
+      if (!fileImg || !fileImg.type.includes('image')) {
+        setImgErrMsg('Selecciona una imagen')
+  
+        setTimeout(() => {
+          setImgErrMsg('')
+        }, 3000);
+        return;
+      };
+  
+      const formData = new FormData()
+      formData.append('file', fileImg)
+      await updateHeroImg({
+        sectionId: hero.id,
+        content: hero,
+        formData
+      })
+        .then(updatedLanding => {
+  
+          if(!updatedLanding) return;
+          
+              changeHeroContent({
+                img: updatedLanding.img as unknown as Img,
+                title:updatedLanding.title,
+                description: updatedLanding.description,
+                button: updatedLanding.button as unknown as Button
+              })
+             
+        })
+    }
+
+
+
+
+    // useEffect(() => {
+    //     if (sendDB) {
+    //         updateSectionsLayout(landingId, sectionsLayout)
+    //             .then(updatedLanding => {
+    //                 setSectionsLayout(updatedLanding.sectionsLayout as unknown as SectionsLayout);
+
+    //                 setSendDB(false);
+    //             })
+    //     }
+    // }, [sendDB])
 
     return (
         <section className="flex flex-col p-2 gap-4">
@@ -78,7 +149,6 @@ export const EditHeroSection = () => {
                     ))}
                 </select>
             </div>
-
             <input
                 className="input"
                 type="text"
@@ -117,7 +187,34 @@ export const EditHeroSection = () => {
                 name="imgAlt"
                 onChange={onInputChange} />
 
-            <EditImage idSection={hero.id} imgSrc={img.src} imgAlt={img.alt} />
+            <div className="flex flex-row items-center gap-2 mb-2">
+                <input
+                    className="input"
+                    id="file_input"
+                    type="file"
+                    onChange={handleChageInputFile}
+                />
+                <button
+                    className="editElement__button"
+                    onClick={uploadImage}
+                    aria-label="Upload image"
+                >
+                    <FaCloudUploadAlt />
+                </button>
+            </div>
+
+            <CreateImageWithAi defaultPrompt={img.alt} />
+
+            {
+                imgErrMsg
+                &&
+                <div className="p-4 text-sm text-red-800 rounded-lg bg-red-100" role="alert">
+                    <span className="font-medium">{imgErrMsg}</span>
+                </div>
+            }
+            <div className="mt-4">
+                <Image src={img.src} width={100} height={100} alt='image hero' />
+            </div>
 
         </section>
     )

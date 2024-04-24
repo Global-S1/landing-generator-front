@@ -5,7 +5,7 @@ import { DisplaySection } from "../../DisplaySection";
 
 export const EditFaqSection = () => {
     const { 
-        faq, 
+        sections:{faq}, 
 
         addNewFaqItem 
     } = useLandingStore(state => state);
