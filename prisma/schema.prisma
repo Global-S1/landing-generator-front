@@ -33,11 +33,117 @@ model Landing {
   id              String @id @default(auto()) @map("_id") @db.ObjectId
   title           String
   initialp_prompt String
-  content         Json
-  sectionsLayout  Json
   userId          String @db.ObjectId
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Sections Sections[]
+  Hero     Hero[]
+  About    About[]
+  Features Features[]
+  Faq      Faq[]
+  Cta      Cta[]
+  Footer   Footer[]
+  Header   Header[]
+}
+
+model Sections {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  headerId   String? @db.ObjectId
+  heroId     String? @db.ObjectId
+  aboutId    String? @db.ObjectId
+  featuresId String? @db.ObjectId
+  faqId      String? @db.ObjectId
+  ctaId      String? @db.ObjectId
+  footerId   String? @db.ObjectId
+  landingId  String  @db.ObjectId
+
+  header   Header?   @relation(fields: [headerId], references: [id])
+  hero     Hero?     @relation(fields: [heroId], references: [id])
+  hbout    About?    @relation(fields: [aboutId], references: [id])
+  heatures Features? @relation(fields: [featuresId], references: [id])
+  haq      Faq?      @relation(fields: [faqId], references: [id])
+  cta      Cta?      @relation(fields: [ctaId], references: [id])
+  footer   Footer?   @relation(fields: [footerId], references: [id])
+  landing  Landing   @relation(fields: [landingId], references: [id], onDelete: Cascade)
+}
+
+model Header {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+
+  landingId String @db.ObjectId
+
+  landing  Landing    @relation(fields: [landingId], references: [id], onDelete: Cascade)
+  Sections Sections[]
+}
+
+model Hero {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  img         Json
+  button      Json
+  layout      Json
+  landingId   String @db.ObjectId
+
+  landing  Landing    @relation(fields: [landingId], references: [id], onDelete: Cascade)
+  Sections Sections[]
+}
+
+model About {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  img         Json
+  layout      Json
+  landingId   String @db.ObjectId
+
+  landing  Landing    @relation(fields: [landingId], references: [id], onDelete: Cascade)
+  Sections Sections[]
+}
+
+model Features {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  features  Json[]
+  layout    Json
+  landingId String @db.ObjectId
+
+  landing  Landing    @relation(fields: [landingId], references: [id], onDelete: Cascade)
+  Sections Sections[]
+}
+
+model Faq {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  faq       Json[]
+  layout    Json
+  landingId String @db.ObjectId
+
+  landing  Landing    @relation(fields: [landingId], references: [id], onDelete: Cascade)
+  Sections Sections[]
+}
+
+model Cta {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  layout      Json
+  landingId   String @db.ObjectId
+
+  landing  Landing    @relation(fields: [landingId], references: [id], onDelete: Cascade)
+  Sections Sections[]
+}
+
+model Footer {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+
+  landingId String @db.ObjectId
+
+  landing  Landing    @relation(fields: [landingId], references: [id], onDelete: Cascade)
+  Sections Sections[]
 }
 
 model Account {

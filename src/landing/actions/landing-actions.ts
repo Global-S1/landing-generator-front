@@ -17,29 +17,101 @@ export interface CreateLandingDto {
 export const createLanding = async (data: CreateLandingDto) => {
     const user = await getUserServerSession();
     if (!user) {
-        redirect('/api/auth/signin')
+        redirect('/api/auth/signin');
     };
 
-    const sectionsLayout = {
-        hero: { id: '1' },
-        about: { id: '1', status: true },
-        features: { id: '1', status: true },
-        faq: { id: '1', status: true },
-        cta: { id: '1', status: true },
-        footer: { id: '1', status: true },
-    }
+    const { title, initialp_prompt, content } = data;
 
     const landing = await prisma.landing.create({
         data: {
-            initialp_prompt: data.initialp_prompt,
-            title: data.title,
-            content: data.content as any,
-            sectionsLayout,
-            userId: user.id
+            initialp_prompt,
+            title,
+            userId: user.id,
         }
     })
 
-    return landing;
+    const layout = { id: '1', status: true }
+
+    const [header, hero, about, features, faq, cta, footer] = await Promise.all([
+        prisma.header.create({
+            data: {
+                title,
+                landingId: landing.id
+            }
+        }),
+        prisma.hero.create({
+            data: {
+                ...content.hero,
+                layout,
+                landingId: landing.id
+            }
+        }),
+        prisma.about.create({
+            data: {
+                ...content.about,
+                layout,
+
+                landingId: landing.id
+            }
+        }),
+        prisma.features.create({
+            data: {
+                title: content.features.title,
+                features: content.features.features as object[],
+                layout,
+
+                landingId: landing.id
+            }
+        }),
+        prisma.faq.create({
+            data: {
+                title: content.faq.title,
+                faq: content.faq.faqData as object[],
+                layout,
+
+                landingId: landing.id
+            }
+        }),
+        prisma.cta.create({
+            data: {
+                ...content.cta,
+                layout,
+
+                landingId: landing.id
+            }
+        }),
+        prisma.footer.create({
+            data: {
+                title,
+                landingId: landing.id
+            }
+        }),
+    ])
+
+    const sections = await prisma.sections.create({
+        data: {
+            headerId: header.id,
+            heroId: hero.id,
+            aboutId: about.id,
+            featuresId: features.id,
+            faqId: faq.id,
+            ctaId: cta.id,
+            footerId: footer.id,
+            landingId: landing.id
+        },
+        include: {
+            header: true,
+            hero: true,
+            hbout: true,
+            heatures: true,
+            haq: true,
+            cta: true,
+            footer: true,
+            landing: true
+        }
+    })
+
+    return sections;
 }
 
 export const updateLandingContent = async (landingId: string, content: LandingContent) => {
