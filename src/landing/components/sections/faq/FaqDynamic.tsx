@@ -6,7 +6,7 @@ import { FaqSectionProps } from "../../../interfaces";
 export const FaqDynamic = ({ title, faqData }: FaqSectionProps) => {
 
     return (
-        <section id="faq" className="container max-w-7xl m-auto py-[200px] px-4">
+        <section id="faq" className="container max-w-7xl m-auto py-[100px] px-4">
             <h2 className="text-4xl font-bold mb-4">{title}</h2>
             <div className="divide-y divide-gray-200">
                 {faqData.map((faq, index) => (

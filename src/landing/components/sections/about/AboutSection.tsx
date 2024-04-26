@@ -2,21 +2,25 @@ import { AboutSectionProps } from '../../../interfaces';
 
 export const AboutSection = ({ title, description, img }: AboutSectionProps) => {
   return (
-    <section id='about' className="bg-white">
-      <div className="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
-        <div className="font-light text-gray-600 sm:text-lg">
-          <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 ">{title}</h2>
-          <p className="mb-4">{description}</p>
+    <section id="about" >
+    <div className="container mx-auto py-[100px] px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
+            <div className="max-w-lg">
+                <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">{title}</h2>
+                <p className="mt-4 text-gray-600 text-lg">
+                  {description}
+                  </p>
+                
+            </div>
+            <div className="mt-12 md:mt-0">
+                <img src={img.src} alt={img.alt} className="object-cover rounded-lg shadow-md"/>
+            </div>
         </div>
-        <div className="grid grid-cols-2 gap-4 mt-8">
-          <img className="w-full rounded-lg" src={img.src} alt={img.alt} />
-          <img className="mt-4 w-full lg:mt-10 rounded-lg" src={img.src} alt={img.alt} />
-        </div>
-      </div>
-    </section>
+    </div>
+</section>
   )
 }
 
 
-{/* <Image className="w-full rounded-lg" src={img.src} alt={img.alt} width={240} height={240} /> */ }
-{/* <Image className="mt-4 w-full lg:mt-10 rounded-lg" src={img.src} alt={img.alt} width={240} height={240} /> */ }
+{/* <Image classNameNameName="w-full rounded-lg" src={img.src} alt={img.alt} width={240} height={240} /> */ }
+{/* <Image classNameNameName="mt-4 w-full lg:mt-10 rounded-lg" src={img.src} alt={img.alt} width={240} height={240} /> */ }

@@ -1,16 +1,9 @@
 # Pendiente:
 
-### Secciones restantes
+### Diseño:
+La sección about, cta y footer solo tienen un diseño.
+El diseño dinamico de la sección FaQ es muy simple.
+La sección header es muy simple
 
-- Falta implementar la edición del header y footer ✅
-
-### Diseños:
-
-- Solo se ha creado diseños para la seccion hero
-- La seccion de preguntas frecuentes tiene dos diseño pero falta darle la funcion de cambiar de diseño.
-- Se creo la carpeta para las otras secciones pero están vacias
-- el server action para cambiar el diseño de una sección, solo funciona para la seccion hero
-
-### colores
-
+### Colores:
 Como cambiar los colores en el diseño

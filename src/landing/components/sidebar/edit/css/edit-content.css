@@ -45,6 +45,12 @@
     left: 4px;
     bottom: 4px;
     background-color: white;
+    text-align: center;
+    content: 'NO';
+    font-size: 0.7rem;
+    color:#696969;
+    font-weight: bold;
+    line-height: 22px;
     border-radius: 50%;
     transition: 0.4s;
 }
@@ -55,4 +61,6 @@ input:checked + .slider{
 
 input:checked + .slider::before{
     transform: translateX(28px);
+    color:#214696;
+    content: 'SI';
 }

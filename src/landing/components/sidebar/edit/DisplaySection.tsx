@@ -15,21 +15,19 @@ export const DisplaySection = ({ status, onChangeContent }: Props) => {
   }
 
   return (
-    <div className="topping flex flex-row gap-2">
+    <div className="topping flex flex-row items-center gap-2">
       <label className="switch">
         <input
           type="checkbox"
           defaultChecked={status}
           name="topping"
           onChange={onCheckboxChange}
-        />
+          />
         <span className="slider"></span>
       </label>
-      <span>
-        {
-          status ? 'Ocultar sección' : 'Mostrar sección'
-        }
-      </span>
+          <span>
+            Mostrar sección
+          </span>
     </div>
   )
 }

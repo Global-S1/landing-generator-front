@@ -1,22 +1,22 @@
-import { ChangeEvent, useEffect, useState } from 'react'
-import { useDesignStore, useLandingStore } from '@/store'
+import { useEffect } from 'react'
+import { useLandingStore } from '@/store'
 import { useForm } from '@/hooks';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import { CreateImageWithAi } from '../CreateImageWithAi';
-import { updateHeroImg, updateSectionLayout } from '@/landing/actions';
-import { Button, Img, Layout } from '@/landing/interfaces';
+import { updateHeroImg } from '@/landing/actions';
+import { Button, Img } from '@/landing/interfaces';
 import Image from 'next/image';
+import { InputChangeLayout } from '../InputChangeLayout';
 
 export const EditHeroSection = () => {
 
     const {
-        sections: { hero },
+        sections,
 
         changeHeroContent
     } = useLandingStore(state => state);
+    const { hero } = sections;
     const { title, description, img, button } = hero;
-
-    const heroOption = useDesignStore(state => state.heroOption);
 
     const {
         formState,
@@ -39,15 +39,6 @@ export const EditHeroSection = () => {
         { name: 'Imagen de fondo', option: '2' },
         { name: 'Full screen', option: '3' },
     ];
-    const [sendDB, setSendDB] = useState(false)
-    const [option, setOption] = useState(hero.layout.id)
-    const onOptionChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
-
-        const option = event.target.value;
-
-        setOption(option)
-        setSendDB(true);
-    };
 
     useEffect(() => {
         changeHeroContent({
@@ -92,40 +83,21 @@ export const EditHeroSection = () => {
                     description: updatedLanding.description,
                     button: updatedLanding.button as unknown as Button
                 })
-
             })
     }
-
-    useEffect(() => {
-        if (sendDB) {
-            updateSectionLayout(hero.id, option)
-                .then(updatedSection => {
-                    if (updatedSection) {
-
-                        const layout = updatedSection.layout as unknown as Layout
-
-                        changeHeroContent({
-                            layout: { id: layout.id, status: true }
-                        })
-                        setSendDB(false);
-                    }
-                })
-        }
-    }, [sendDB])
 
     return (
         <section className="flex flex-col p-2 gap-4">
 
-            <div className="flex flex-col gap-2">
-                <span className="font-bold">Elije un diseño</span>
-                <select className='input' onChange={onOptionChangeHandler} defaultValue={heroOption} >
-                    {options.map(option => (
-                        <option key={option.option} value={option.option}>
-                            {option.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
+            <InputChangeLayout
+                defaultValue={hero.layout.id}
+                options={options}
+                onchangeOption={(option) => {
+                    changeHeroContent({
+                        layout: { id: option, status: hero.layout.status }
+                    })
+                }} />
+
             <input
                 className="input"
                 type="text"

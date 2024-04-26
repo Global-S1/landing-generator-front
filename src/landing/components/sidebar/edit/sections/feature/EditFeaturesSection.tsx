@@ -1,6 +1,7 @@
 import { useLandingStore } from "@/store";
 import { EditFeatureItem } from "./EditFeatureItem";
 import { DisplaySection } from "../../DisplaySection";
+import { InputChangeLayout } from "../../InputChangeLayout";
 
 export const EditFeaturesSection = () => {
 
@@ -24,6 +25,12 @@ export const EditFeaturesSection = () => {
         addNewFeature(newFeature)
     }
 
+    const options = [
+        { name: 'Simple', option: '1' },
+        { name: 'Cards', option: '2' },
+        { name: 'ai', option: '3' },
+    ];
+
     return (
         <section className="flex flex-col p-2 gap-4">
             <DisplaySection
@@ -33,6 +40,19 @@ export const EditFeaturesSection = () => {
                         layout: {
                             id: featuresInfo.layout.id,
                             status: value
+                        }
+                    })
+                }}
+            />
+
+            <InputChangeLayout
+                defaultValue={featuresInfo.layout.id}
+                options={options}
+                onchangeOption={(option) => {
+                    changeFeaturesContent({
+                        layout: {
+                            id: option,
+                            status: featuresInfo.layout.status 
                         }
                     })
                 }}
