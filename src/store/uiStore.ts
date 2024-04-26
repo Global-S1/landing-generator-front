@@ -5,6 +5,7 @@ interface UiStore {
 
     sectionSelected: SectionType | null;
     setSectionSelected: (section: SectionType) => void;
+
 }
 
 export const useUiStore = create<UiStore>((set) => ({

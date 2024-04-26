@@ -20,6 +20,8 @@ interface SetInitState {
 
 interface LandingState {
     landing: Landing;
+    color: string;
+    setColor: (value: string) => void;
     sections: {
         header: Header;
         hero: Hero;
@@ -69,6 +71,10 @@ interface ChangeFooterContent extends Partial<Omit<Footer, "id" | "layout" | "la
 
 export const useLandingStore = create<LandingState>((set) => ({
     landing: {} as Landing,
+    color: '#000000',
+    setColor: ( color: string ) => set({
+        color,
+    }),
     sections: {
         header: {} as Header,
         hero: {} as Hero,
