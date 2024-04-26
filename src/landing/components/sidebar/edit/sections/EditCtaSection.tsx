@@ -5,7 +5,7 @@ import { useForm } from "@/hooks";
 
 export const EditCtaSection = () => {
     const {
-        sections:{cta},
+        sections: { cta },
         changeCtaContent
     } = useLandingStore(state => state);
     const { title, description, button, layout } = cta;
@@ -32,7 +32,17 @@ export const EditCtaSection = () => {
 
     return (
         <section className="flex flex-col p-2 gap-4">
-            <DisplaySection sectionId="cta" status={layout.status}/>
+            <DisplaySection
+                status={layout.status}
+                onChangeContent={value => {
+                    changeCtaContent({
+                        layout: {
+                            id: cta.layout.id,
+                            status: value
+                        }
+                    })
+                }}
+            />
 
             <input
                 className="input"

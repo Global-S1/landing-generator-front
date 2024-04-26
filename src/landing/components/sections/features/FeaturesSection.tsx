@@ -1,4 +1,4 @@
-import { Feature, Features, FeaturesSectionProps } from "../../interfaces";
+import { Feature, Features, FeaturesSectionProps } from "../../../interfaces";
 
 const FeatureItem = ({ img, title, description }: Feature) => {
 

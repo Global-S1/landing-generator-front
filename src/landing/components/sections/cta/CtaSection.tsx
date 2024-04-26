@@ -1,4 +1,4 @@
-import { CtaSectionProps } from "../../interfaces"
+import { CtaSectionProps } from "../../../interfaces"
 
 export const CtaSection = ({ title, description, button }: CtaSectionProps) => {
     return (

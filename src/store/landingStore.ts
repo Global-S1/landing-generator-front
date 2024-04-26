@@ -17,6 +17,7 @@ interface SetInitState {
     }
 }
 
+
 interface LandingState {
     landing: Landing;
     sections: {
@@ -35,10 +36,13 @@ interface LandingState {
 
     changeFeatureItemContent: (oldTitle: string, value: ChangeFeatureItemContent) => void;
 
+    changeHeaderContent: (value: ChangeHeaderContent) => void;
     changeHeroContent: (value: ChangeHeroContent) => void;
     changeAboutContent: (value: ChangeAboutContent) => void;
     changeFeaturesContent: (value: ChangeFeaturesContent) => void;
+    changeFaqContent: (value: ChangeFaqContent) => void;
     changeCtaContent: (value: ChangeCtaContent) => void;
+    changeFooterContent: (value: ChangeFooterContent) => void;
 
     addNewFeature: (value: Feature) => void;
     deleteFeature: (title: string) => void;
@@ -49,17 +53,19 @@ interface LandingState {
 
 }
 
+interface ChangeHeaderContent extends Partial<Omit<Header, "id" | "layout" | "landingId">> { }
 interface ChangeHeroContent extends Partial<Omit<Hero, "id" | "landingId">> { }
-interface ChangeAboutContent extends Omit<About, "id" | "layout" | "landingId"> { }
+interface ChangeAboutContent extends Partial<Omit<About, "id" | "landingId">> { }
 
 interface ChangeFeatureItemContent extends Partial<Feature> { }
-interface ChangeFeaturesContent extends Omit<Features, "id" | "layout" | "landingId"> { }
+interface ChangeFeaturesContent extends Partial<Omit<Features, "id" | "landingId">> { }
 interface ChangeFaqItemContent {
     question?: string;
     answer?: string;
 }
-interface ChangeFaqContent extends Partial<Omit<Faq, "id" | "layout" | "landingId">> { }
-interface ChangeCtaContent extends Omit<Cta, "id" | "layout" | "landingId"> { }
+interface ChangeFaqContent extends Partial<Omit<Faq, "id" | "landingId">> { }
+interface ChangeCtaContent extends Partial<Omit<Cta, "id" | "landingId">> { }
+interface ChangeFooterContent extends Partial<Omit<Footer, "id" | "layout" | "landingId">> { }
 
 export const useLandingStore = create<LandingState>((set) => ({
     landing: {} as Landing,
@@ -81,6 +87,15 @@ export const useLandingStore = create<LandingState>((set) => ({
         ...value
     }),
 
+    changeHeaderContent: (value: ChangeHeaderContent) => set(({ sections }) => ({
+        sections: {
+            ...sections,
+            header: {
+                ...sections.header,
+                ...value
+            },
+        }
+    })),
     changeHeroContent: (value: ChangeHeroContent) => set(({ sections }) => ({
         sections: {
             ...sections,
@@ -92,13 +107,10 @@ export const useLandingStore = create<LandingState>((set) => ({
     })),
     changeAboutContent: (value: ChangeAboutContent) => set(({ sections }) => ({
         sections: {
-
             ...sections,
             about: {
-                ...value,
-                id: sections.about.id,
-                layout: sections.about.layout,
-                landingId: sections.about.landingId,
+                ...sections.about,
+                ...value
             },
         }
     })),
@@ -106,10 +118,17 @@ export const useLandingStore = create<LandingState>((set) => ({
         sections: {
             ...sections,
             features: {
-                ...value,
-                id: sections.about.id,
-                layout: sections.about.layout,
-                landingId: sections.about.landingId,
+                ...sections.features,
+                ...value
+            },
+        }
+    })),
+    changeFaqContent: (value: ChangeFaqContent) => set(({ sections }) => ({
+        sections: {
+            ...sections,
+            faq: {
+                ...sections.faq,
+                ...value
             },
         }
     })),
@@ -117,11 +136,18 @@ export const useLandingStore = create<LandingState>((set) => ({
         sections: {
             ...sections,
             cta: {
+                ...sections.cta,
                 ...value,
-                id: sections.cta.id,
-                layout: sections.cta.layout,
-                landingId: sections.cta.landingId,
             }
+        }
+    })),
+    changeFooterContent: (value: ChangeFooterContent) => set(({ sections }) => ({
+        sections: {
+            ...sections,
+            footer: {
+                ...sections.footer,
+                ...value
+            },
         }
     })),
 

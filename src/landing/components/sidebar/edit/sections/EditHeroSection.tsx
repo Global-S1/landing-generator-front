@@ -3,8 +3,8 @@ import { useDesignStore, useLandingStore } from '@/store'
 import { useForm } from '@/hooks';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import { CreateImageWithAi } from '../CreateImageWithAi';
-import { updateHeroImg } from '@/landing/actions';
-import { Button, Img } from '@/landing/interfaces';
+import { updateHeroImg, updateSectionLayout } from '@/landing/actions';
+import { Button, Img, Layout } from '@/landing/interfaces';
 import Image from 'next/image';
 
 export const EditHeroSection = () => {
@@ -18,7 +18,15 @@ export const EditHeroSection = () => {
 
     const heroOption = useDesignStore(state => state.heroOption);
 
-    const { formState, onInputChange, onTextAreaChange } = useForm({
+    const {
+        formState,
+        fileImg,
+        imgErrMsg,
+        setImgErrMsg,
+        onInputChange,
+        onTextAreaChange,
+        onInputFileChange
+    } = useForm({
         title,
         description,
         imgAlt: img.alt,
@@ -32,15 +40,12 @@ export const EditHeroSection = () => {
         { name: 'Full screen', option: '3' },
     ];
     const [sendDB, setSendDB] = useState(false)
+    const [option, setOption] = useState(hero.layout.id)
     const onOptionChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
 
         const option = event.target.value;
 
-        console.log(option)
-        changeHeroContent({
-        layout:{id: option, status: true}
-        })
-
+        setOption(option)
         setSendDB(true);
     };
 
@@ -60,81 +65,53 @@ export const EditHeroSection = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formState])
 
-
-
-    const [fileImg, setFileImg] = useState<File | null>(null)
-    const [imgErrMsg, setImgErrMsg] = useState('')
-  
-    const handleChageInputFile = (event: ChangeEvent<HTMLInputElement>) => {
-      const files = (event.target as HTMLInputElement).files
-  
-      if (files && files.length > 0) {
-        const file = files[0];
-        if (!file.type.includes('image')) {
-          setImgErrMsg('Ingresa una imagen')
-  
-          setTimeout(() => {
-            setImgErrMsg('')
-          }, 3000);
-          return;
-        }
-        if (file instanceof Blob) {
-  
-          setFileImg(file)
-        } else {
-          // Manejar caso donde `files[0]` no es un objeto Blob
-          console.error('El archivo seleccionado no es válido.');
-        }
-      } else {
-        // Manejar caso donde no se selecciona ningún archivo
-        console.warn('Ningún archivo seleccionado.');
-      }
-    }
-  
     async function uploadImage() {
-      if (!fileImg || !fileImg.type.includes('image')) {
-        setImgErrMsg('Selecciona una imagen')
-  
-        setTimeout(() => {
-          setImgErrMsg('')
-        }, 3000);
-        return;
-      };
-  
-      const formData = new FormData()
-      formData.append('file', fileImg)
-      await updateHeroImg({
-        sectionId: hero.id,
-        content: hero,
-        formData
-      })
-        .then(updatedLanding => {
-  
-          if(!updatedLanding) return;
-          
-              changeHeroContent({
-                img: updatedLanding.img as unknown as Img,
-                title:updatedLanding.title,
-                description: updatedLanding.description,
-                button: updatedLanding.button as unknown as Button
-              })
-             
+        if (!fileImg || !fileImg.type.includes('image')) {
+            setImgErrMsg('Selecciona una imagen')
+
+            setTimeout(() => {
+                setImgErrMsg('')
+            }, 3000);
+            return;
+        };
+
+        const formData = new FormData()
+        formData.append('file', fileImg)
+        await updateHeroImg({
+            sectionId: hero.id,
+            content: hero,
+            formData
         })
+            .then(updatedLanding => {
+
+                if (!updatedLanding) return;
+
+                changeHeroContent({
+                    img: updatedLanding.img as unknown as Img,
+                    title: updatedLanding.title,
+                    description: updatedLanding.description,
+                    button: updatedLanding.button as unknown as Button
+                })
+
+            })
     }
 
+    useEffect(() => {
+        if (sendDB) {
+            updateSectionLayout(hero.id, option)
+                .then(updatedSection => {
+                    if (updatedSection) {
 
+                        const layout = updatedSection.layout as unknown as Layout
 
-
-    // useEffect(() => {
-    //     if (sendDB) {
-    //         updateSectionsLayout(landingId, sectionsLayout)
-    //             .then(updatedLanding => {
-    //                 setSectionsLayout(updatedLanding.sectionsLayout as unknown as SectionsLayout);
-
-    //                 setSendDB(false);
-    //             })
-    //     }
-    // }, [sendDB])
+                        changeHeroContent({
+                            layout: { id: layout.id, status: true }
+                        })
+                        setSendDB(false);
+                    }
+                })
+        }
+    }, [sendDB])
 
     return (
         <section className="flex flex-col p-2 gap-4">
@@ -192,7 +169,7 @@ export const EditHeroSection = () => {
                     className="input"
                     id="file_input"
                     type="file"
-                    onChange={handleChageInputFile}
+                    onChange={onInputFileChange}
                 />
                 <button
                     className="editElement__button"

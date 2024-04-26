@@ -1,18 +1,35 @@
-import { SectionType } from '@/interfaces'
-import React from 'react'
+import { SectionType } from '@/interfaces';
+import React, { ChangeEvent } from 'react';
 
 interface Props {
-  sectionId: SectionType;
   status: boolean;
+  onChangeContent: (value: boolean) => void;
 }
 
-export const DisplaySection = ({ sectionId, status }: Props) => {
+export const DisplaySection = ({ status, onChangeContent }: Props) => {
 
+  const onCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.checked;
+
+    onChangeContent(value);
+  }
 
   return (
     <div className="topping flex flex-row gap-2">
-      <input type="checkbox" id="topping" name="topping" value="ACTIVE" checked={status} />
-      Mostrar sección
+      <label className="switch">
+        <input
+          type="checkbox"
+          defaultChecked={status}
+          name="topping"
+          onChange={onCheckboxChange}
+        />
+        <span className="slider"></span>
+      </label>
+      <span>
+        {
+          status ? 'Ocultar sección' : 'Mostrar sección'
+        }
+      </span>
     </div>
   )
 }

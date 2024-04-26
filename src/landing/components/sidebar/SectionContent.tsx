@@ -1,9 +1,20 @@
 import { SectionType } from "@/interfaces"
-import { EditHeroSection, EditAboutSection, EditFeaturesSection, EditCtaSection, EditFaqSection } from "./edit"
+import {
+    EditHeaderSection,
+    EditHeroSection,
+    EditAboutSection,
+    EditFeaturesSection,
+    EditCtaSection,
+    EditFaqSection,
+    EditFooterSection
+} from "./edit"
 
 
 export const SectionContent = ({ sectionId }: { sectionId: SectionType }) => {
 
+    if (sectionId === 'header') {
+        return <EditHeaderSection />
+    }
     if (sectionId === 'hero') {
         return <EditHeroSection />
     }
@@ -18,6 +29,9 @@ export const SectionContent = ({ sectionId }: { sectionId: SectionType }) => {
     }
     if (sectionId === 'cta') {
         return <EditCtaSection />
+    }
+    if (sectionId === 'footer') {
+        return <EditFooterSection />
     }
 
     return (

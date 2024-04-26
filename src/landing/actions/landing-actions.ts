@@ -2,8 +2,9 @@
 
 import { getUserServerSession } from "@/auth/actions/getUserSession";
 import prisma from "@/lib/prisma";
-import { LandingContent } from "../interfaces";
+import { About, Cta, Faq, Features, Footer, Header, Hero, LandingContent } from "../interfaces";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export interface CreateLandingDto {
     content: LandingContent;
@@ -109,6 +110,103 @@ export const createLanding = async (data: CreateLandingDto) => {
     })
 
     return sections;
+}
+
+interface UpdateSections {
+    header: Header;
+    hero: Hero;
+    about: About;
+    features: Features;
+    faq: Faq;
+    cta: Cta;
+    footer: Footer;
+}
+
+export const updateSectionsContent = async (landingId: string, sections: UpdateSections) => {
+    const user = await getUserServerSession();
+    if (!user) {
+        redirect('/api/auth/signin');
+    }
+
+    const { header, hero, about, features, faq, cta, footer } = sections;
+
+    await Promise.all([
+        prisma.header.update({
+            where: { landingId, id: header.id },
+            data: {
+                title: header.title
+            }
+        }),
+        prisma.hero.update({
+            where: { landingId, id: hero.id },
+            data: {
+                title: hero.title,
+                description: hero.description,
+                img: hero.img as object,
+                button: hero.button as object,
+                layout: hero.layout as object
+            }
+        }),
+
+        prisma.about.update({
+            where: { landingId, id: about.id },
+            data: {
+                title: about.title,
+                description: about.description,
+                img: about.img as object,
+                layout: about.layout as object
+            }
+        }),
+        prisma.features.update({
+            where: { landingId, id: features.id },
+            data: {
+                title: features.title,
+                features: features.features as object[],
+                layout: features.layout as object
+            }
+        }),
+        prisma.faq.update({
+            where: { landingId, id: faq.id },
+            data: {
+                title: faq.title,
+                faqData: faq.faqData as object[],
+                layout: faq.layout as object
+            }
+        }),
+        prisma.cta.update({
+            where: { landingId, id: cta.id },
+            data: {
+                title: cta.title,
+                description: cta.description,
+                button: cta.button as object,
+                layout: cta.layout as object
+            }
+        }),
+        prisma.footer.update({
+            where: { landingId, id: footer.id },
+            data: {
+                title: footer.title
+            }
+        })
+    ]);
+
+
+    const updatedContent = await prisma.sections.findFirst({
+        where: { landingId },
+        include: {
+            header: true,
+            hero: true,
+            about: true,
+            features: true,
+            faq: true,
+            cta: true,
+            footer: true,
+            landing: true
+        }
+    });
+
+    return updatedContent;
+
 }
 
 export const getLandings = async () => {

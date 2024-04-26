@@ -4,24 +4,13 @@ import { useEffect } from "react";
 import { SkeletonEditPage, TopBar } from "@/components";
 import { getLandingContent } from "@/landing/actions";
 import { Landing, Sidebar } from "@/landing/components";
-import { About, Cta, Faq, Features, Footer, Header, Hero, LandingContent } from "@/landing/interfaces";
+import { About, Cta, Faq, Features, Footer, Header, Hero } from "@/landing/interfaces";
 import { useLandingStore } from "@/store/landingStore";
 
 export default function EditPage({ params }: { params: { id: string } }) {
 
-  // const landingId = useLandingStore(state => state.id);
-  const {landing, setState} = useLandingStore( state => state);
-  const {id: landingId} = landing;
-
-  // const {
-  //   sectionsLayout,
-
-  //   setLandingContent,
-  //   setTitle,
-  //   setServerLanding,
-  //   setSectionsLayout
-  // } = useLandingStore(state => state);
-
+  const { landing, setState } = useLandingStore(state => state);
+  const { id: landingId } = landing;
 
   useEffect(() => {
     if (landingId === params.id) return;
@@ -29,10 +18,10 @@ export default function EditPage({ params }: { params: { id: string } }) {
     getLandingContent(params.id)
       .then(resp => {
         if (!resp) return;
-        const {header, hero, about, features, faq, cta, footer, landing} = resp;
+        const { header, hero, about, features, faq, cta, footer, landing } = resp;
         setState({
           landing,
-          sections:{
+          sections: {
             header: header as Header,
             hero: hero as unknown as Hero,
             about: about as unknown as About,
@@ -42,6 +31,8 @@ export default function EditPage({ params }: { params: { id: string } }) {
             footer: footer as Footer,
           }
         })
+
+        localStorage.setItem('sectionsContent', JSON.stringify({ header, hero, about, features, faq, cta, footer }))
       })
   }, [])
 

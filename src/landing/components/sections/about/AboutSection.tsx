@@ -1,4 +1,4 @@
-import { AboutSectionProps } from '../../interfaces';
+import { AboutSectionProps } from '../../../interfaces';
 
 export const AboutSection = ({ title, description, img }: AboutSectionProps) => {
   return (

@@ -4,10 +4,12 @@ import { FaqItem } from "@/landing/interfaces";
 import { DisplaySection } from "../../DisplaySection";
 
 export const EditFaqSection = () => {
-    const { 
-        sections:{faq}, 
+    const {
+        sections: { faq },
 
-        addNewFaqItem 
+
+        addNewFaqItem,
+        changeFaqContent
     } = useLandingStore(state => state);
     const { faqData, layout } = faq;
 
@@ -22,7 +24,17 @@ export const EditFaqSection = () => {
 
     return (
         <section className="flex flex-col p-2 gap4">
-            <DisplaySection sectionId="faq" status={layout.status} />
+            <DisplaySection
+                status={layout.status}
+                onChangeContent={value => {
+                    changeFaqContent({
+                        layout: {
+                            id: faq.layout.id,
+                            status: value
+                        },
+                    })
+                }}
+            />
 
             <div className="flex flex-col items-start gap-2">
                 {

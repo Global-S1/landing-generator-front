@@ -1,15 +1,11 @@
+import { Header } from "@/landing/interfaces";
 
-interface Props {
-  logo: string;
-  image?: string;
-}
-
-export const Header = ({ logo, image }: Props) => {
+export const HeaderSection = ({ title }: Header) => {
   return (
     <header id="header" className="bg-black shadow-lg text-white">
       <div className="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
         <div>
-            <span className='text-3xl font-bold'>{logo}</span>
+          <span className='text-3xl font-bold'>{title}</span>
         </div>
         <div>
           {/* <img src={image} alt="Header Image" className="h-12 w-auto" /> */}

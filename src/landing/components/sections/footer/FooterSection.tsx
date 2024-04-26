@@ -1,5 +1,6 @@
+import { Footer } from "@/landing/interfaces";
 
-export const Footer = () => {
+export const FooterSection = ({ title }: Footer) => {
   return (
     <footer id="footer" className="bg-black text-white py-20">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
