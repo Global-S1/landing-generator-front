@@ -7,6 +7,7 @@ import { updateHeroImg } from '@/landing/actions';
 import { Button, Img } from '@/landing/interfaces';
 import Image from 'next/image';
 import { InputChangeLayout } from '../InputChangeLayout';
+import { InputElemenet } from '../components/InputElemenet';
 
 export const EditHeroSection = () => {
 
@@ -98,13 +99,7 @@ export const EditHeroSection = () => {
                     })
                 }} />
 
-            <input
-                className="input"
-                type="text"
-                placeholder="Hero title"
-                value={formState.title}
-                name="title"
-                onChange={onInputChange} />
+            <InputElemenet label='Title' data={{name:'title', placeholder: 'Hero title', value: formState.title}} onInputChange={onInputChange}/>
             <textarea
                 className="input resize-none"
                 cols={30}

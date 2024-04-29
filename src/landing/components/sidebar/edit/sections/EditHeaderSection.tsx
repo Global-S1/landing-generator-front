@@ -1,6 +1,6 @@
+import { useEffect } from "react"
 import { useForm } from "@/hooks"
 import { useLandingStore } from "@/store"
-import { useEffect } from "react"
 
 export const EditHeaderSection = () => {
 
@@ -18,7 +18,6 @@ export const EditHeaderSection = () => {
         changeHeaderContent({
             title: formState.title
         })
-
     }, [formState])
 
     return (
