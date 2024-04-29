@@ -4,8 +4,7 @@ import { getUserServerSession } from "@/auth/actions/getUserSession";
 import prisma from "@/lib/prisma";
 import { About, Cta, Faq, Features, Footer, Header, Hero, LandingContent } from "../interfaces";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-
+ 
 export interface CreateLandingDto {
     content: LandingContent;
     initialp_prompt: string;
@@ -25,6 +24,7 @@ export const createLanding = async (data: CreateLandingDto) => {
             initialp_prompt,
             title,
             userId: user.id,
+            color: '#9c27b0'
         }
     })
 

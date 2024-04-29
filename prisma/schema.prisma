@@ -34,6 +34,7 @@ model Landing {
   title           String
   initialp_prompt String
   userId          String @db.ObjectId
+  color           String
 
   user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   Sections Sections[]
@@ -117,7 +118,7 @@ model Features {
 model Faq {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   title     String
-  faqData       Json[]
+  faqData   Json[]
   layout    Json
   landingId String @db.ObjectId
 
@@ -129,7 +130,7 @@ model Cta {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
-  button Json
+  button      Json
   layout      Json
   landingId   String @db.ObjectId
 

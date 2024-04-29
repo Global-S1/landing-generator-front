@@ -2,6 +2,8 @@ import { useLandingStore } from "@/store";
 import { EditFeatureItem } from "./EditFeatureItem";
 import { DisplaySection } from "../../DisplaySection";
 import { InputChangeLayout } from "../../InputChangeLayout";
+import { useForm } from "@/hooks";
+import { useEffect } from "react";
 
 export const EditFeaturesSection = () => {
 
@@ -12,6 +14,10 @@ export const EditFeaturesSection = () => {
         changeFeaturesContent
     } = useLandingStore(state => state);
     const { features, layout } = featuresInfo;
+
+    const { formState, onInputChange } = useForm({
+        title: featuresInfo.title
+    })
 
     const handleAddNewFeature = () => {
         const newFeature = {
@@ -30,6 +36,12 @@ export const EditFeaturesSection = () => {
         { name: 'Cards', option: '2' },
         { name: 'ai', option: '3' },
     ];
+
+    useEffect(() => {
+        changeFeaturesContent({
+            title: formState.title
+        })
+    }, [formState])
 
     return (
         <section className="flex flex-col p-2 gap-4">
@@ -52,11 +64,19 @@ export const EditFeaturesSection = () => {
                     changeFeaturesContent({
                         layout: {
                             id: option,
-                            status: featuresInfo.layout.status 
+                            status: featuresInfo.layout.status
                         }
                     })
                 }}
             />
+
+            <input
+                className="input"
+                type="text"
+                placeholder="Title"
+                value={formState.title}
+                name="title"
+                onChange={onInputChange} />
 
             <div className="flex flex-col items-start gap-2">
                 {

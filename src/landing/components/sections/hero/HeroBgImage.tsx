@@ -1,6 +1,10 @@
+import { useLandingStore } from "@/store";
 import { HeroSectionProps } from "../../../interfaces"
 
 export const HeroBgImage = ({ title, description, img, button }: HeroSectionProps) => {
+
+    const { landing: { color } } = useLandingStore(state => state);
+
     return (
         <section id="hero" className="relative">
             <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -8,7 +12,11 @@ export const HeroBgImage = ({ title, description, img, button }: HeroSectionProp
                 <div>
                     <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{title}</h1>
                     <p className="text-lg md:text-xl text-white mb-6">{description}</p>
-                    <a href={button.link} className="bg-pink-500 hover:bg-pink-600 transition-all text-white font-bold py-3 px-6 rounded-full shadow-lg uppercase">{button.text}</a>
+                    <a
+                        href={button.link}
+                        className="transition-all text-white font-bold py-3 px-6 rounded-full shadow-lg uppercase"
+                        style={{ backgroundColor: color }}
+                    >{button.text}</a>
                 </div>
             </div>
             <div className="absolute inset-0" style={{ backgroundImage: `url(${img.src})`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: -10 }}></div>

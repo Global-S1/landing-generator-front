@@ -3,6 +3,8 @@ import { EditFaqItem } from "./EditFaqItem";
 import { FaqItem } from "@/landing/interfaces";
 import { DisplaySection } from "../../DisplaySection";
 import { InputChangeLayout } from "../../InputChangeLayout";
+import { useForm } from "@/hooks";
+import { useEffect } from "react";
 
 export const EditFaqSection = () => {
     const {
@@ -12,6 +14,10 @@ export const EditFaqSection = () => {
         changeFaqContent
     } = useLandingStore(state => state);
     const { faqData, layout } = faq;
+
+    const { formState, onInputChange } = useForm({
+        title: faq.title
+    })
 
     const handleAddNewFaqItem = () => {
         const newFaqItem: FaqItem = {
@@ -26,6 +32,13 @@ export const EditFaqSection = () => {
         { name: 'Simple', option: '1' },
         { name: 'Dinamico', option: '2' },
     ];
+
+
+    useEffect(() => {
+        changeFaqContent({
+            title: formState.title
+        })
+    }, [formState])
 
     return (
         <section className="flex flex-col p-2 gap-4">
@@ -53,6 +66,14 @@ export const EditFaqSection = () => {
                     })
                 }}
             />
+
+            <input
+                className="input"
+                type="text"
+                placeholder="Title"
+                value={formState.title}
+                name="title"
+                onChange={onInputChange} />
 
             <div className="flex flex-col items-start gap-2">
                 {

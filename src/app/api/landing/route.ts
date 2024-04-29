@@ -1,6 +1,6 @@
 import { getUserServerSession } from "@/auth/actions/getUserSession";
 import { landingContentExample } from "@/landing/data";
-import { LandingContent, LandingResponse } from "@/landing/interfaces";
+import { LandingContent } from "@/landing/interfaces";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
@@ -81,6 +81,7 @@ export async function POST(req: Request) {
             title,
             initialp_prompt: prompt,
             userId: user.id,
+            color: '#9c27b0'
         }
     })
 
@@ -166,4 +167,15 @@ export async function POST(req: Request) {
     })
 
     return NextResponse.json(sections)
+}
+
+export async function PUT(){
+    
+    await prisma.landing.updateMany({
+        data: {
+            color: '#9c27b0'
+        }
+    })
+    
+    return NextResponse.json({msg: 'actualizado'})
 }

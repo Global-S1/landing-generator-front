@@ -92,4 +92,5 @@ export interface Landing {
     title:           string;
     initialp_prompt: string;
     userId:          string;
+    color:          string;
 }

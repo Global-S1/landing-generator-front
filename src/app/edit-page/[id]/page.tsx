@@ -9,7 +9,7 @@ import { useLandingStore } from "@/store/landingStore";
 
 export default function EditPage({ params }: { params: { id: string } }) {
 
-  const { landing, setState } = useLandingStore(state => state);
+  const { landing, setState, setColor } = useLandingStore(state => state);
   const { id: landingId } = landing;
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function EditPage({ params }: { params: { id: string } }) {
     getLandingContent(params.id)
       .then(resp => {
         if (!resp) return;
-        const { header, hero, about, features, faq, cta, footer, landing } = resp;
+        const { header, hero, about, features, faq, cta, footer, landing, } = resp;
         setState({
           landing,
           sections: {

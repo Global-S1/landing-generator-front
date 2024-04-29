@@ -20,7 +20,6 @@ interface SetInitState {
 
 interface LandingState {
     landing: Landing;
-    color: string;
     setColor: (value: string) => void;
     sections: {
         header: Header;
@@ -69,12 +68,8 @@ interface ChangeFaqContent extends Partial<Omit<Faq, "id" | "landingId">> { }
 interface ChangeCtaContent extends Partial<Omit<Cta, "id" | "landingId">> { }
 interface ChangeFooterContent extends Partial<Omit<Footer, "id" | "layout" | "landingId">> { }
 
-export const useLandingStore = create<LandingState>((set) => ({
+export const useLandingStore = create<LandingState>((set, get) => ({
     landing: {} as Landing,
-    color: '#000000',
-    setColor: ( color: string ) => set({
-        color,
-    }),
     sections: {
         header: {} as Header,
         hero: {} as Hero,
@@ -84,6 +79,12 @@ export const useLandingStore = create<LandingState>((set) => ({
         cta: {} as Cta,
         footer: {} as Footer,
     },
+    setColor:(value: string) => set(({ landing }) => ({
+        landing: {
+            ...landing,
+            color: value
+        }
+    })),
     sectionsId: ['header', 'hero', 'about', 'features', 'faq', 'cta', 'footer'],
 
     setSections: (value: SectionType[]) => set({

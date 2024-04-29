@@ -1,6 +1,10 @@
 import { HeroSectionProps } from "@/landing/interfaces"
+import { useLandingStore } from "@/store";
 
 export const HeroClassic = ({ title, description, img, button }: HeroSectionProps) => {
+    
+    const {landing: {color}} = useLandingStore(state => state);
+
     return (
         <section id="hero" className="relative flex flex-col items-center max-w-screen-xl px-4 mx-auto md:flex-row sm:px-6 p-8">
             <div className="flex items-center py-5 md:w-1/2 md:pb-20 md:pt-10 md:pr-10">
@@ -15,7 +19,9 @@ export const HeroClassic = ({ title, description, img, button }: HeroSectionProp
                     <div className="mt-5 sm:flex md:mt-8">
                         <div className="rounded-md shadow">
                             <a href={button.link}
-                                className="flex items-center justify-center w-full px-8 py-3 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-pink-500 hover:bg-pink-600 border border-transparent rounded-md focus:outline-none focus:shadow-outline-blue md:py-4 md:text-lg md:px-10">
+                                className="flex items-center justify-center w-full px-8 py-3 text-base font-medium leading-6 text-white transition duration-150 ease-in-out border border-transparent rounded-md focus:outline-none focus:shadow-outline-blue md:py-4 md:text-lg md:px-10"
+                                style={{backgroundColor: color}}
+                                >
                                 {button.text}
                             </a>
                         </div>
