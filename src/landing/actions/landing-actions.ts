@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 import { About, Cta, Faq, Features, Footer, Header, Hero, LandingContent } from "../interfaces";
 import { redirect } from "next/navigation";
 import { template } from "../data/template";
- 
+
 export interface CreateLandingDto {
     content: LandingContent;
     initialp_prompt: string;
@@ -221,25 +221,25 @@ export const getLandings = async () => {
 }
 
 export const getLandingContent = async (id: string) => {
-    // const user = await getUserServerSession();
-    // if (!user) {
-    //     redirect('/api/auth/signin')
-    // }
-    // const landing = await prisma.sections.findFirst({
-    //     where: { landingId: id },
-    //     include: {
-    //         header: true,
-    //         hero: true,
-    //         about: true,
-    //         features: true,
-    //         faq: true,
-    //         cta: true,
-    //         footer: true,
-    //         landing: true
-    //     }
-    // });
+    const user = await getUserServerSession();
+    if (!user) {
+        redirect('/api/auth/signin')
+    }
+    const landing = await prisma.sections.findFirst({
+        where: { landingId: id },
+        include: {
+            header: true,
+            hero: true,
+            about: true,
+            features: true,
+            faq: true,
+            cta: true,
+            footer: true,
+            landing: true
+        }
+    });
 
 
-    return template;
+    return landing;
 }
 

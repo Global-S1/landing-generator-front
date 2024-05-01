@@ -22,7 +22,17 @@ export const uploadImage = async (formData: FormData) => {
     })
     const urlImage = cloudinaryResponse!.secure_url;
 
-    return urlImage 
+    return urlImage
+}
+
+export const uploadImageFromUrl = async (imgUrl: string) => {
+
+    const cloudinaryResponse: UploadApiResponse | undefined = await cloudinary.uploader.upload(imgUrl, {
+        folder: CLOUDINARY_FOLDER
+    })
+    const urlImage = cloudinaryResponse!.secure_url;
+
+    return urlImage
 }
 
 export const deleteImage = async (oldUrl: string) => {

@@ -143,8 +143,6 @@ export const EditAboutSection = () => {
         </button>
       </div>
 
-      <CreateImageWithAi defaultPrompt={img.alt} />
-
       {
         imgErrMsg
         &&
@@ -152,6 +150,22 @@ export const EditAboutSection = () => {
           <span className="font-medium">{imgErrMsg}</span>
         </div>
       }
+
+      <CreateImageWithAi
+        defaultPrompt={img.alt}
+        onSaveData={async (imgUrl) => {
+          await updateAboutImg({ sectionId: about.id, content: about, imgUrl })
+            .then(updatedLanding => {
+
+              if (!updatedLanding) return;
+
+              changeAboutContent({
+                img: updatedLanding.img as unknown as Img,
+              })
+            })
+        }}
+      />
+
       <div className="mt-4">
         <Image src={img.src} width={100} height={100} alt='image about' />
       </div>

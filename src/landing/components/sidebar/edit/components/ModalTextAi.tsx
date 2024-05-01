@@ -14,7 +14,7 @@ const tags = [
     'Amigable'
 ]
 
-export const ModalTextAi = ({ defaultText , open, handleClose }: Props) => {
+export const ModalTextAi = ({ defaultText, open, handleClose }: Props) => {
 
     return (
         <Modal
@@ -35,14 +35,20 @@ export const ModalTextAi = ({ defaultText , open, handleClose }: Props) => {
                     value={defaultText}
                     name="description"
                     onChange={() => { }} />
+                <h4>Intención</h4>
                 <div className="flex gap-2">
                     {
                         tags.map(item => (
-                            <span key={item} className="rounded-lg bg-purple-200 text-md px-2">
+                            <span key={item} className="rounded-lg bg-blue-200 hover:bg-blue-300 transition-all text-md px-2 cursor-pointer">
                                 {item}
                             </span>
                         ))
                     }
+                </div>
+                <div className="flex">
+                    <button>
+                        Guardar
+                    </button>
                 </div>
             </div>
         </Modal>

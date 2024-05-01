@@ -1,23 +1,17 @@
+'use client';
+
 import { useState } from "react";
 import { SiCodemagic } from "react-icons/si";
-import { createImageWithAi, saveImageAi } from "@/landing/actions";
+import { createImageWithAi } from '@/landing/actions';
 import { useForm } from "@/hooks";
-import { useLandingStore } from "@/store";
-import { LandingContent } from "@/landing/interfaces";
+import { Modal } from "@mui/material";
 
 interface Props {
-    defaultPrompt: string
+    defaultPrompt: string;
+    onSaveData: (imgUrl: string) => Promise<void>;
 }
 
-export const CreateImageWithAi = ({ defaultPrompt }: Props) => {
-
-    const {
-        id: landingId,
-        landing,
-
-        setServerLanding,
-        setLandingContent,
-    } = useLandingStore(state => state);
+export const CreateImageWithAi = ({ defaultPrompt, onSaveData }: Props) => {
 
     const [showModal, setShowModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -29,21 +23,26 @@ export const CreateImageWithAi = ({ defaultPrompt }: Props) => {
 
     async function createImgAi() {
         const prompt = formState.description;
+        setIsLoading(true);
 
         await createImageWithAi(prompt)
             .then(url => {
                 if (url) {
+
                     setImageAi(url)
+                    setIsLoading(false)
                 }
             });
     }
 
     async function saveImage() {
-        await saveImageAi(landingId, 'hero', landing, imageAi)
-            .then(updatedLanding => {
+        setIsLoading(true)
 
-                setLandingContent(landingId, updatedLanding.content as unknown as LandingContent);
-                setServerLanding(updatedLanding.content as unknown as LandingContent);
+        await onSaveData(imageAi)
+            .then(() => {
+                setIsLoading(false)
+                setShowModal(false)
+                setImageAi('')
             })
     }
 
@@ -59,12 +58,18 @@ export const CreateImageWithAi = ({ defaultPrompt }: Props) => {
                 Crear imagen con AI
                 <SiCodemagic />
             </button>
-            {
-                showModal && (
-                    <section className="w-full grid grid-cols-2 gap-2">
-                        <div>
+            <Modal
+                open={showModal}
+                onClose={() => setShowModal(!showModal)}
+                aria-labelledby="parent-modal-title"
+                aria-describedby="parent-modal-description"
+            >
+                <div className="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] p-4 rounded-md bg-white w-[700px] h-[250px]">
+                    <div className="grid grid-cols-[2fr_1fr] gap-4 h-full">
+
+                        <div className="flex flex-col justify-between">
                             <textarea
-                                className="input resize-none"
+                                className="input border-2 border-gray-600 p-2 resize-none"
                                 cols={30}
                                 rows={4}
                                 spellCheck={false}
@@ -75,22 +80,29 @@ export const CreateImageWithAi = ({ defaultPrompt }: Props) => {
                             <div className="flex flex-row  justify-between">
                                 {
                                     !imageAi
-                                        ? <button onClick={createImgAi}>Enviar</button>
-                                        : <button className="bg-blue-500" onClick={saveImage}>Guardar</button>
+                                        ? <button onClick={createImgAi} className="btn" disabled={isLoading}>Enviar</button>
+                                        : <button className="btn" onClick={saveImage} disabled={isLoading}>Guardar</button>
                                 }
-                                <button>Cancelar</button>
-
+                                <button
+                                    disabled={isLoading}
+                                    className="btn"
+                                    onClick={() => setShowModal(!showModal)}
+                                >
+                                    Cancelar
+                                </button>
                             </div>
-
                         </div>
-                        <div className=" bg-slate-400">
-                            <img src={imageAi} />
+
+                        <div className=" bg-slate-400 rounded-md">
+                            <img src={imageAi} className="object-cover h-full w-ful" />
                         </div>
-                    </section>
-                )
+                    </div>
+
+                </div>
+
+            </Modal>
 
 
-            }
         </>
     )
 }

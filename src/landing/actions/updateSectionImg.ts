@@ -2,7 +2,7 @@
 
 import { getUserServerSession } from "@/auth/actions/getUserSession";
 import { redirect } from "next/navigation";
-import { deleteImage, uploadImage } from "./cloudinaryActions";
+import { deleteImage, uploadImage, uploadImageFromUrl } from "./cloudinaryActions";
 import prisma from "@/lib/prisma";
 import { About, Features, Hero } from "../interfaces";
 
@@ -11,16 +11,23 @@ type Content = Hero | About
 interface UpdateImage {
     sectionId: string;
     content: Content;
-    formData: FormData;
+    formData?: FormData;
+    imgUrl?: string;
 }
 
-export const updateHeroImg = async ({ sectionId, content, formData }: UpdateImage) => {
+export const updateHeroImg = async ({ sectionId, content, formData, imgUrl }: UpdateImage) => {
     const user = await getUserServerSession();
     if (!user) {
         redirect('/api/auth/signin');
     };
 
-    const urlImage = await uploadImage(formData);
+    let urlImage;
+    if (formData) {
+        urlImage = await uploadImage(formData);
+    }
+    if (imgUrl) {
+        urlImage = await uploadImageFromUrl(imgUrl);
+    }
     await deleteImage(content.img.src);
 
     const updateResponse = prisma.hero.update({
@@ -32,13 +39,20 @@ export const updateHeroImg = async ({ sectionId, content, formData }: UpdateImag
 
     return updateResponse;
 }
-export const updateAboutImg = async ({ sectionId, content, formData }: UpdateImage) => {
+
+export const updateAboutImg = async ({ sectionId, content, formData, imgUrl }: UpdateImage) => {
     const user = await getUserServerSession();
     if (!user) {
         redirect('/api/auth/signin');
     };
 
-    const urlImage = await uploadImage(formData);
+    let urlImage;
+    if (formData) {
+        urlImage = await uploadImage(formData);
+    }
+    if (imgUrl) {
+        urlImage = await uploadImageFromUrl(imgUrl);
+    }
     await deleteImage(content.img.src);
 
     const updateResponse = prisma.about.update({
@@ -54,19 +68,28 @@ export const updateAboutImg = async ({ sectionId, content, formData }: UpdateIma
 interface UpdateImageFeatureItem {
     sectionId: string;
     content: Features;
-    formData: FormData;
+    formData?: FormData;
+    imgUrl?: string;
 }
-export const updateFeatureItemImg = async (title: string,{ sectionId, content, formData }: UpdateImageFeatureItem) => {
+
+export const updateFeatureItemImg = async (title: string, { sectionId, content, formData, imgUrl }: UpdateImageFeatureItem) => {
     const user = await getUserServerSession();
     if (!user) {
         redirect('/api/auth/signin');
     };
 
-    const {features} = content;
+    const { features } = content;
 
-    const indexFeature: number  | undefined = content.features.findIndex(el => el.title.trim() === title.trim())
+    const indexFeature: number | undefined = content.features.findIndex(el => el.title.trim() === title.trim())
 
-    const urlImage = await uploadImage(formData);
+    let urlImage = '';
+    if (formData) {
+        urlImage = await uploadImage(formData);
+    }
+    if (imgUrl) {
+        urlImage = await uploadImageFromUrl(imgUrl);
+    }
+
     await deleteImage(features[indexFeature].img.src);
 
     features[indexFeature].img.src = urlImage;

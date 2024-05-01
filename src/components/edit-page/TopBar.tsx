@@ -1,11 +1,12 @@
 'use client'
 
 import { useRouter } from "next/navigation";
-import { Logo } from "../ui"
+import { Logo, SpinLoader } from "../ui"
 import { BtnExport } from "./BtnExport"
 import { useLandingStore } from "@/store";
 import { updateSectionsContent } from "@/landing/actions";
 import { About, Cta, Faq, Features, Footer, Header, Hero } from "@/landing/interfaces";
+import { useState } from "react";
 
 export const TopBar = () => {
 
@@ -16,18 +17,19 @@ export const TopBar = () => {
     } = useLandingStore(state => state);
 
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false)
 
     const oldSectionsContent = localStorage.getItem('sectionsContent') ?? '{}';
 
     const update = JSON.stringify(sections) === oldSectionsContent;
 
 
-    const background = update ? 'bg-green-600' : 'bg-blue-600'
-    const updateText = update ? 'Actualizado' : 'Guardar cambios'
+    const background = update ? 'bg-green-600' : 'bg-blue-600';
+    const updateText = update ? 'Actualizado' : 'Guardar cambios';
+
     async function updateContent() {
-
-
         if (!update) {
+            setIsLoading(true);
             updateSectionsContent(landing.id, sections)
                 .then(resp => {
                     if (!resp) return;
@@ -46,6 +48,8 @@ export const TopBar = () => {
                     })
 
                     localStorage.setItem('sectionsContent', JSON.stringify({ header, hero, about, features, faq, cta, footer }))
+                    setIsLoading(false);
+
                 })
         }
     }
@@ -60,11 +64,17 @@ export const TopBar = () => {
             <Logo />
 
             <div className="flex flex-row gap-2">
-                <button className={`py-2 px-4 rounded-md text-white ${background}`} onClick={updateContent}>{updateText}</button>
+                <button
+                    className={`py-2 px-4 rounded-md w-[170px] text-white cursor-pointer ${background}`}
+                    onClick={updateContent}
+                    disabled={isLoading}
+                >
+                    {!isLoading && updateText}
+                    {isLoading && <SpinLoader />}
+                </button>
                 <button className="btn" onClick={handleGoBack}>home</button>
                 <BtnExport />
             </div>
         </header>
     )
 }
-
